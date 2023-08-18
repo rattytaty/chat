@@ -6,8 +6,11 @@ $bg-form: #B3A5D4;
 $dText: #1d1c2f;
 $lText: #D8D7DB;
 
-$b: #43414d;
-$a: #2c2b31;
+$b: #242F3D;
+$a: #17212B;
+
+$c:#2B5278;
+$d:#182533;
 
 
 .formsWrapper {
@@ -91,6 +94,7 @@ $a: #2c2b31;
   }
 
   .chatsPage {
+
     width: 65%;
     height: 80%;
     border-radius: 20px;
@@ -175,7 +179,7 @@ $a: #2c2b31;
 
     .chats {
       flex: 4;
-      background-color: $bg-form;
+      background-color: #0E1621;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -231,18 +235,19 @@ $a: #2c2b31;
 
       .messages {
         overflow-y: auto;
-
+        display: flex;
+        flex-direction: column-reverse;
 
 
         .message {
           display: flex;
-          margin: 5px 0 0 15px;
-          width: max-content;
-
+          margin-top: 10px;
 
           .messageInfo {
             display: flex;
             flex-direction: column;
+            margin: 0 15px ;
+            color: $lText;
           }
 
           .photo {
@@ -253,35 +258,38 @@ $a: #2c2b31;
 
           }
 
-          .message-orange {
+          .message-right {
             position: relative;
             margin-bottom: 10px;
-            margin-right: 0;
+            margin-right: 15px;
+            margin-left: auto;
             padding: 10px;
-            background-color: #f8e896;
+            background-color: $d;
             width: max-content;
             max-width: 400px;
             height: auto;
             text-align: left;
-            border: 1px solid #dfd087;
+            border: 1px solid #516260;
             border-radius: 10px;
-            overflow-wrap: break-word
+            overflow-wrap: break-word;
+            color: $lText;
 
           }
 
-          .message-blue{
+          .message-left {
             position: relative;
             margin-left: 15px;
             margin-bottom: 10px;
             padding: 10px;
-            background-color: #A8DDFD;
+            background-color: $c;
             width: max-content;
             max-width: 400px;
             height: auto;
             text-align: left;
             border: 1px solid #97C6E3;
             border-radius: 10px;
-            overflow-wrap: break-word
+            overflow-wrap: break-word;
+            color: $lText;
           }
 
           .message-content {
@@ -297,19 +305,19 @@ $a: #2c2b31;
             left: 5px;
           }
 
-          .message-blue:after {
+          .message-left:after {
             content: '';
             position: absolute;
             width: 0;
             height: 0;
-            border-top: 15px solid #A8DDFD;
+            border-top: 15px solid $c;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
             top: 0;
             left: -15px;
           }
 
-          .message-blue:before {
+          .message-left:before {
             content: '';
             position: absolute;
             width: 0;
@@ -323,7 +331,6 @@ $a: #2c2b31;
           }
 
 
-
           .message-timestamp-right {
             position: absolute;
             font-size: .85em;
@@ -333,24 +340,24 @@ $a: #2c2b31;
 
           }
 
-          .message-orange:after {
+          .message-right:after {
             content: '';
             position: absolute;
             width: 0;
             height: 0;
-            border-bottom: 15px solid #f8e896;
+            border-bottom: 15px solid $d;
             border-left: 15px solid transparent;
             border-right: 15px solid transparent;
             bottom: 0;
             right: -15px;
           }
 
-          .message-orange:before {
+          .message-right:before {
             content: '';
             position: absolute;
             width: 0;
             height: 0;
-            border-bottom: 17px solid #dfd087;
+            border-bottom: 17px solid #516260;
             border-left: 16px solid transparent;
             border-right: 16px solid transparent;
             bottom: -1px;
