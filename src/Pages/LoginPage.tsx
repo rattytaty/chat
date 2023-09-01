@@ -1,9 +1,8 @@
 import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
 import {NavLink, useNavigate} from "react-router-dom";
-import {useUser} from "../useUser";
-import {createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
-import {auth, db} from "../firebase";
-import {doc, setDoc} from "firebase/firestore";
+import {useUser} from "../hooks/useUser";
+import {signInWithEmailAndPassword} from "firebase/auth";
+import {auth} from "../firebase";
 import {FirebaseError} from "firebase/app";
 
 type formData = {
@@ -19,7 +18,7 @@ export const LoginPage = () => {
         if (user) {
             navigate("/")
         }
-    }, [user]);
+    }, [user, navigate]);
     const [formData, setFormData] = useState<formData>({
         email: "",
         password: ""
@@ -37,7 +36,7 @@ export const LoginPage = () => {
         } catch (error) {
             if (error instanceof FirebaseError) {
                 console.log(error)
-                const {code, message} = error
+                //const {code, message} = error
             }
         }
     }

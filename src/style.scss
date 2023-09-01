@@ -164,10 +164,13 @@ $d:#182533;
         }
 
         .info {
+
+          margin-left: 15px;
           font-size: 20px;
-          margin-left: 10px;
+          display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: center;
+
 
           span {
             font-size: 14px;

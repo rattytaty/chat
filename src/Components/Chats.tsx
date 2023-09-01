@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {MessagesBlock} from "./MessagesBlock";
+import {SelectedUserContext} from "../hooks/selectedUserContext";
+import anonUser from '../accets/anonUser.svg'
 
 export const Chats = () => {
+
+    const {state} = useContext(SelectedUserContext)
+
     return <div className="chats">
         <div className="chatInfo">
             <div className="userInfo">
                 <img className="userImg"
-                     src={"https://www.readersdigest.ca/wp-content/uploads/2017/08/being-a-good-person.jpg"}/>
-                <span>User Name</span>
+                     src={state.chatUser.photoUrl?state.chatUser.photoUrl:anonUser}/>
+                <span>{state.chatUser.displayName}</span>
             </div>
 
             <button className="primaryButton">change</button>

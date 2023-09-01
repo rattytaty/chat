@@ -36,7 +36,8 @@ export const RegisterPage = () => {
             await setDoc(doc(db, "users", response.user.uid), {
                 displayName:nickname,
                 email,
-                uid: response.user.uid
+                uid: response.user.uid,
+                photoUrl:null
             });
             await setDoc(doc(db, "usersChats", response.user.uid), {});
 
@@ -45,7 +46,7 @@ export const RegisterPage = () => {
         } catch (error) {
             if (error instanceof FirebaseError) {
                 console.log(error)
-                const {code, message} = error
+                //const {code, message} = error
             }
         }
     }
