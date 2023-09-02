@@ -31,6 +31,7 @@ $d:#182533;
     align-items: center;
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 
+
     .formLogo {
       font-size: 30px;
       font-weight: bold;
@@ -95,8 +96,8 @@ $d:#182533;
 
   .chatsPage {
 
-    width: 65%;
-    height: 80%;
+    width: 75%;
+    height: 90%;
     border-radius: 20px;
     display: flex;
     overflow: hidden;
@@ -119,6 +120,7 @@ $d:#182533;
       position: relative;
       display: flex;
       flex-direction: column;
+
 
       .sideBarHeader {
         background-color: $a;
@@ -202,6 +204,7 @@ $d:#182533;
           font-size: 20px;
           display: flex;
           align-items: center;
+          margin: 10px;
 
           span {
             margin-left: 15px;
@@ -239,7 +242,7 @@ $d:#182533;
       .messages {
         overflow-y: auto;
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
 
 
         .message {
