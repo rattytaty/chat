@@ -120,6 +120,7 @@ $d:#182533;
       position: relative;
       display: flex;
       flex-direction: column;
+      max-width: 300px;
 
 
       .sideBarHeader {
@@ -296,6 +297,7 @@ $d:#182533;
             border-radius: 10px;
             overflow-wrap: break-word;
             color: $lText;
+
           }
 
           .message-content {

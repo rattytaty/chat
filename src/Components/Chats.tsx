@@ -1,8 +1,8 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {MessagesBlock} from "./MessagesBlock";
 import {SelectedUserContext} from "../hooks/selectedUserContext";
 import anonUser from '../accets/anonUser.svg'
-import {arrayUnion, doc, Timestamp, updateDoc} from "firebase/firestore";
+import {arrayUnion, doc, serverTimestamp, Timestamp, updateDoc} from "firebase/firestore";
 import {db, storage} from "../firebase";
 import {useUser} from "../hooks/useUser";
 import {getDownloadURL, ref, uploadBytesResumable} from 'firebase/storage';
@@ -42,11 +42,23 @@ export const Chats = () => {
                 })
             })
         }
+
+        await Promise.allSettled([ await updateDoc(doc(db, "usersChats", user!.uid),{
+            [state.chatId+".lastMessage"]:{msgText},
+            [state.chatId+".date"]:Timestamp.now()
+        }),
+            await updateDoc(doc(db, "usersChats", state.chatUser.uid),{
+                [state.chatId+".lastMessage"]:{msgText},
+                [state.chatId+".date"]:Timestamp.now()
+            })])
+
         setImg(null)
         setMsgText("")
     }
-    return <>{state.chatId && <div className="chats">
-        <div className="chatInfo">
+
+
+
+    return <div className="chats">{state.chatId&&<><div className="chatInfo">
             <div className="userInfo">
                 <img className="userImg"
                      src={state.chatUser.photoUrl ? state.chatUser.photoUrl : anonUser}/>
@@ -55,32 +67,32 @@ export const Chats = () => {
 
             <button className="primaryButton">change</button>
         </div>
-        <MessagesBlock/>
-        <div className="inputBlock">
-            <div className="inputContainer">
+            <MessagesBlock/>
+            <div className="inputBlock">
+                <div className="inputContainer">
 
-                <input type="file"
-                       style={{display: "none"}}
-                       id="file"
-                       onChange={event => {
-                           if (event.currentTarget.files) {
-                               setImg(event.currentTarget.files[0])
-                           }
-                       }}/>
-                <label htmlFor="file">
-                    <button className="primaryButton">Attach</button>
-                </label>
+                    <input type="file"
+                           style={{display: "none"}}
+                           id="file"
+                           onChange={event => {
+                               if (event.currentTarget.files) {
+                                   setImg(event.currentTarget.files[0])
+                               }
+                           }}/>
+                    <label htmlFor="file">
+                        <button className="primaryButton">Attach</button>
+                    </label>
 
 
-                <input placeholder="Write down a message..."
-                       value={msgText}
-                       onChange={event => setMsgText(event.currentTarget.value)}
-                />
-            </div>
-            <button className="primaryButton"
-                    onClick={sendMsg}
-            >Send
-            </button>
-        </div>
-    </div>}</>
-};
+                    <input placeholder="Write down a message..."
+                           value={msgText}
+                           onChange={event => setMsgText(event.currentTarget.value)}
+                           onKeyDown={event => event.code==="Enter"&&sendMsg()}
+                    />
+                </div>
+                <button className="primaryButton"
+                        onClick={sendMsg}
+                >Send
+                </button>
+            </div></>}
+    </div>}

@@ -30,14 +30,15 @@ type foundUser = {
 interface chat {
     [key: string]: {
         date: {
-            second: string
-            nanoseconds: string
+            second: number
+            nanoseconds: number
         }
         userInfo: {
             uid: string
             photoUrl: string | null
             displayName: string
         }
+        lastMessage:{msgText:string}
     }
 }
 
@@ -87,6 +88,7 @@ export const SideBar = () => {
                         photoUrl: foundUser!.photoUrl,
                     },
                     [combinedId + ".date"]: serverTimestamp()
+
                 })
                 await updateDoc(doc(db, "usersChats", foundUser!.uid), {
                     [combinedId + ".userInfo"]: {
@@ -95,6 +97,7 @@ export const SideBar = () => {
                         photoUrl: user!.photoURL,
                     },
                     [combinedId + ".date"]: serverTimestamp()
+
                 })
             }
             dispatch({type: "CHANGE_USER", payload: userInfo})
@@ -122,11 +125,16 @@ export const SideBar = () => {
     }
 
 
+
+
     return <div className="sideBar">
         <div className="sideBarHeader">
             <div className="logo">Chat App</div>
             <div className="userInf">
                 <span>{user?.displayName}</span>
+
+                <img style={{width:"30px"}} src={user?.photoURL?user?.photoURL:anonUser}/>
+
                 <button onClick={logOutHandler} className="primaryButton">Logout</button>
             </div>
         </div>
@@ -140,11 +148,12 @@ export const SideBar = () => {
                      src={foundUser.photoUrl ? foundUser.photoUrl : anonUser}/>
                 <div className="info">
                     <div>{foundUser.displayName}</div>
+
                 </div>
 
             </div>}
 
-            {chats && Object.entries(chats)?.map(chat =>
+            {chats && Object.entries(chats)?.sort((a,b)=>(b[1].date?b[1].date.second:0)-(a[1].date?a[1].date.second:0)).map(chat =>
                 <div className="userBlock"
                      key={chat[0]}
                      onClick={() => selectChat(chat[1].userInfo)}
@@ -153,7 +162,8 @@ export const SideBar = () => {
                          src={chat[1].userInfo.photoUrl ? chat[1].userInfo.photoUrl : anonUser}/>
                     <div className="info">
                         <div>{chat[1].userInfo.displayName}</div>
-                        <span>{}</span>
+                        {chat[1].lastMessage&&<span>{chat[1].lastMessage.msgText}</span>}
+
                     </div>
                 </div>)}
         </div>

@@ -61,7 +61,20 @@ export const LoginPage = () => {
                        onChange={handleChange}/>
                 <button type="submit">Sign up</button>
             </form>
-            <NavLink to="/register" className="bottomText">Don't have an account?</NavLink>
+            <span>Log in to existing acc:</span>
+            <div style={{display:"flex", gap:"50px"}}>
+                <div>
+                    <div>johndoe@gmail.com</div>
+                    <div>JohnDoe</div>
+                </div>
+                <div>
+                    <div>janedoe@gmail.com</div>
+                    <div>JaneDoe</div>
+                </div>
+
+
+            </div>
+            <NavLink to="/register" className="bottomText">Or create a new account.</NavLink>
         </div>
     </div>
 };

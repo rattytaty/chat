@@ -1,15 +1,16 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {MutableRefObject, Ref, useContext, useEffect, useRef, useState} from 'react';
 import {SelectedUserContext} from "../hooks/selectedUserContext";
-
-
 import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../firebase";
 import {useUser} from "../hooks/useUser";
+import {Message} from "./Message";
 
-type msg = {
-    date:{seconds:number
-    nanoseconds:number}
-    id:string
+export type message = {
+    date: {
+        seconds: number
+        nanoseconds: number
+    }
+    id: string
     msgText: string
     senderId: string
 }
@@ -17,42 +18,29 @@ type msg = {
 export const MessagesBlock = () => {
 
     const {state} = useContext(SelectedUserContext)
-    const [messages, setMessages] = useState<msg[]>([])
-const user = useUser()
+    const [messages, setMessages] = useState<message[]>([])
+    const user = useUser()
     useEffect(() => {
         const unSub = onSnapshot(doc(db, "chats", state.chatId as string), (doc) => {
-            doc.exists() && setMessages(doc.data().messages as msg[])
+            doc.exists() && setMessages(doc.data().messages as message[])
         })
         return () => unSub()
-    }, []);
+    }, [state.chatId]);
+
+
+
+    const reference = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        reference.current&&reference.current.scrollIntoView({ behavior: "smooth" });
+    }, [messages]);
 
     return <div className="messages">
         {messages.map(message =>
-            <>{
-                user!.uid===message.senderId
-                    ? <div className="message">
-                        <div className="message-right">
-                            <p className="message-content">{message.msgText}</p>
-                        </div>
-                        <div className="messageInfo">
-                            <img className="photo" alt="photo"
-                                 src={"https://www.readersdigest.ca/wp-content/uploads/2017/08/being-a-good-person.jpg"}/>
-                            <span>13:37</span>
-                        </div>
-                    </div>
-            : <div className="message">
-                        <div className="messageInfo">
-                            <img className="photo" alt="photo"
-                                 src={"https://www.readersdigest.ca/wp-content/uploads/2017/08/being-a-good-person.jpg"}/>
-                            <span>13:37</span>
-                        </div>
-                        <div className="message-left">
-                            <p className="message-content">{message.msgText}</p>
-                        </div>
-                    </div>
-            }</>)
-
-
-        }
+            <Message type={message.senderId === user!.uid
+                ? "right"
+                : "left"}
+                     message={message}
+            />)}
+        <div ref={reference}></div>
     </div>
 };
