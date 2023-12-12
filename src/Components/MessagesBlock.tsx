@@ -1,4 +1,4 @@
-import React, {MutableRefObject, Ref, useContext, useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import {SelectedUserContext} from "../hooks/selectedUserContext";
 import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../firebase";
@@ -34,7 +34,7 @@ export const MessagesBlock = () => {
         reference.current&&reference.current.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    return <div className="messages">
+    return <div >
         {messages.map(message =>
             <Message type={message.senderId === user!.uid
                 ? "right"

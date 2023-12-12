@@ -15,9 +15,9 @@ import {
     updateDoc,
     where
 } from 'firebase/firestore';
-
-import anonUser from '../accets/anonUser.svg'
 import {SelectedUserContext} from "../hooks/selectedUserContext";
+import {Avatar, Box, Divider, Flex, Input, InputGroup, InputLeftElement, Stack, Text} from "@chakra-ui/react";
+import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
 
 type foundUser = {
     displayName: string
@@ -38,7 +38,7 @@ interface chat {
             photoUrl: string | null
             displayName: string
         }
-        lastMessage:{msgText:string}
+        lastMessage: { msgText: string }
     }
 }
 
@@ -124,56 +124,88 @@ export const SideBar = () => {
         dispatch({type: "CHANGE_USER", payload: userInfo})
     }
 
+    return <Stack
+        hideBelow={"799px"}
+        borderRightWidth={"1px"}
+        borderRightColor="#0A121B"
+        h="100vh"
+        >
+        <Flex p={3}
+              alignItems={"center"}
+              gap={4}
+              justifyContent={"space-between"}>
+            <HamburgerIcon
+                boxSize={9}
+                cursor={"pointer"}
+                color="#5A6670"/>
+            <InputGroup>
+                <Input borderRadius={"3xl"}
+                       bg="#242F3D"
+                       _hover={{borderColor: "#17212B"}}
+                       borderColor="#17212B"
+                       focusBorderColor="#17212B"
+                       textColor="#F5F5F5"
+                       size={"md"}
+                       placeholder="Search User"
+                       value={userForSearch}
+                       onChange={e => setUserForSearch(e.currentTarget.value)}
+                       onKeyDown={handleUserSearch}
+                />
+                <InputLeftElement pointerEvents="none">
+                    <Search2Icon color="#5A6670"/>
+                </InputLeftElement>
+            </InputGroup>
 
 
+        </Flex>
 
-    return <div className="sideBar">
-        <div className="sideBarHeader">
-            <div className="logo">Chat App</div>
-            <div className="userInf">
-                <span>{user?.displayName}</span>
+        <Stack style={{scrollbarWidth: "thin"}}
+               overflowY="auto"
+               overflowX="hidden"
+        >
 
-                <img style={{width:"30px"}} src={user?.photoURL?user?.photoURL:anonUser}/>
+            {foundUser &&
 
-                <button onClick={logOutHandler} className="primaryButton">Logout</button>
-            </div>
-        </div>
+                <Flex p={2}
+                      onClick={() => selectFoundUser(foundUser)}
+                      _hover={{backgroundColor: "#202B36"}}
+                      cursor={"pointer"}>
+                    <Avatar src={foundUser.photoUrl ?? undefined}/>
+                    <Box ml='3'>
+                        <Text color="#F5F5F5"
+                              fontWeight='semibold'>
+                            {foundUser.displayName}
+                        </Text>
+                    </Box>
+                </Flex>
+            }
+            {foundUser && <Divider/>}
+            {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
+                <Flex p={2}
+                      onClick={() => selectChat(chat[1].userInfo)}
+                      key={chat[0]}
+                      _hover={{backgroundColor: "#202B36"}}
+                      cursor={"pointer"}>
+                    <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
+                    <Box ml='3'>
+                        <Text color="#F5F5F5"
+                              fontWeight='semibold'>
+                            {chat[1].userInfo.displayName}
+                        </Text>
+                        {chat[1].lastMessage && <Text
+                            overflow="hidden"
+                            whiteSpace="nowrap"
+                            width="200px"
+                            textOverflow="ellipsis"
+                            fontSize='sm'
+                            color="#5A6670">{chat[1].lastMessage.msgText}</Text>}
+                    </Box>
+                </Flex>
+            )}
 
-        <div style={{overflowY: "auto", overflowX: "hidden"}}>
+        </Stack>
 
-            {foundUser && <div className="userBlock"
-                               onClick={()=>selectFoundUser(foundUser)}
-            >
-                <img className="userImg"
-                     src={foundUser.photoUrl ? foundUser.photoUrl : anonUser}/>
-                <div className="info">
-                    <div>{foundUser.displayName}</div>
 
-                </div>
-
-            </div>}
-
-            {chats && Object.entries(chats)?.sort((a,b)=>(b[1].date?b[1].date.second:0)-(a[1].date?a[1].date.second:0)).map(chat =>
-                <div className="userBlock"
-                     key={chat[0]}
-                     onClick={() => selectChat(chat[1].userInfo)}
-                >
-                    <img className="userImg"
-                         src={chat[1].userInfo.photoUrl ? chat[1].userInfo.photoUrl : anonUser}/>
-                    <div className="info">
-                        <div>{chat[1].userInfo.displayName}</div>
-                        {chat[1].lastMessage&&<span>{chat[1].lastMessage.msgText}</span>}
-
-                    </div>
-                </div>)}
-        </div>
-
-        <input className="searchUser"
-               placeholder="Search User"
-               value={userForSearch}
-               onChange={e => setUserForSearch(e.currentTarget.value)}
-               onKeyDown={handleUserSearch}
-        />
-    </div>
+    </Stack>
 
 };

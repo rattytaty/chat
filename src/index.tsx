@@ -1,17 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import {RouterProvider} from "react-router-dom";
 import {router} from "./router";
 import {SelectedUserContextProvider} from "./hooks/selectedUserContext";
+import {ChakraProvider} from "@chakra-ui/react";
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-root.render(
-    <SelectedUserContextProvider>
-        <RouterProvider router={router} fallbackElement={<></>}/>
-    </SelectedUserContextProvider>
-);
+root.render(<ChakraProvider theme={theme}>
+        <SelectedUserContextProvider>
+            <RouterProvider router={router} fallbackElement={<>Loading</>}/>
+        </SelectedUserContextProvider>
+    </ChakraProvider>)
 
 

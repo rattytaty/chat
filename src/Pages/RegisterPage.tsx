@@ -51,10 +51,10 @@ export const RegisterPage = () => {
         }
     }
 
-    return <div className="formsWrapper">
-        <div className="formsContainer">
-            <span className="formLogo">Chat App</span>
-            <span className="formPageTitle">Register</span>
+    return <div >
+        <div >
+            <span >Chat App</span>
+            <span >Register</span>
             <form onSubmit={handleFormSubmit}>
                 <input type="text"
                        placeholder="Nickname"
@@ -76,7 +76,7 @@ export const RegisterPage = () => {
                        onChange={handleChange}/>
                 <button type="submit">Sign in</button>
             </form>
-            <NavLink to="/login" className="bottomText">Have an account already?</NavLink>
+            <NavLink to="/login">Have an account already?</NavLink>
         </div>
     </div>
 };
