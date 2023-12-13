@@ -1,6 +1,6 @@
 import React from 'react';
 import {message} from './MessagesBlock';
-import {Box, Flex, Text} from "@chakra-ui/react";
+import {Flex, Text} from "@chakra-ui/react";
 
 
 const formatTimeToHHMM = (date: Date) => {
@@ -13,43 +13,30 @@ const formatToMMDD = (date: Date) => {
     const day = date.getDate().toString().padStart(2, '0');
     return `${month}.${day}`;
 }
-
-export const Message = (props: {
-    type: "left" | "right",
+type Message = {
+    position: "left" | "right",
     message: message
-}) => {
+}
 
+export const Message: React.FC<Message> = React.memo(({position, message}) => {
     const todayDate = new Date()
-    const dateOfMessage = new Date(props.message.date.seconds * 1000);
+    const dateOfMessage = new Date(message.date.seconds * 1000);
+    const isToday = todayDate.getDate() === dateOfMessage.getDate() && todayDate.getMonth() === dateOfMessage.getMonth() && todayDate.getFullYear() === dateOfMessage.getFullYear()
+    const messageTime = isToday
+        ? formatTimeToHHMM(dateOfMessage)
+        : formatToMMDD(dateOfMessage)
 
-    return <div>
-        <Box>{
-            props.type === "left"
-                ? <Flex m={1} alignItems={"center"}>
-                    <Text color="#5A6670"
-                          m={2}>{todayDate.getDate() === dateOfMessage.getDate() && todayDate.getMonth() === dateOfMessage.getMonth()
-                        ? formatTimeToHHMM(dateOfMessage)
-                        : formatToMMDD(dateOfMessage)}
-                    </Text>
-                    <Text p={2}
-                          maxWidth="75%"
-                          borderRadius='xl'
-                          bg="#182533">{props.message.msgText}</Text>
-                </Flex>
-                : <Flex
-                    m={1}
-                    alignItems={"center"}
-                        justifyContent="right">
-                    <Text p={2}
-                          borderRadius='xl'
-                          maxWidth="75%"
-                          bg="#2B5278">{props.message.msgText}</Text>
-                    <Text color="#5A6670"
-                          m={2} >{todayDate.getDate() === dateOfMessage.getDate() && todayDate.getMonth() === dateOfMessage.getMonth()
-                        ? formatTimeToHHMM(dateOfMessage)
-                        : formatToMMDD(dateOfMessage)}
-                    </Text>
-                </Flex>
-        }</Box>
-    </div>
-};
+    return <Flex flexDirection={position === "left" ? "row" : "row-reverse"}
+                 m={1}
+                 alignItems={"center"}
+                 justifyContent={position}>
+        <Text color="#5A6670"
+              m={2}>{messageTime}</Text>
+        <Text p={2}
+              color="#F5F5F5"
+              maxWidth="75%"
+              borderRadius='xl'
+              bg={position === "left" ? "#182533" : "#2B5278"}>
+            {message.msgText}</Text>
+    </Flex>
+})

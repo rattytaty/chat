@@ -1,8 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
 import {LoginPage} from "./Pages/LoginPage";
 import {RegisterPage} from "./Pages/RegisterPage";
-import {ChatsPage} from "./Pages/ChatsPage";
+import {ChatPage} from "./Pages/ChatPage";
 import {Layout} from "./Pages/Layout";
+import SettingsPage from "./Pages/SettingsPage";
 
 export const router = createBrowserRouter([
     {
@@ -12,7 +13,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <ChatsPage/>
+                element: <ChatPage/>
             },
             {
                 path: "/login",
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <RegisterPage/>,
+            },
+            {
+                path: "/settings",
+                element: <SettingsPage/>,
             }
         ]
     }

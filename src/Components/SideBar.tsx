@@ -26,7 +26,6 @@ type foundUser = {
     photoUrl: string
 }
 
-
 interface chat {
     [key: string]: {
         date: {
@@ -64,7 +63,6 @@ export const SideBar = () => {
         } catch (error) {
             console.log(error)
         }
-
     }
     const handleUserSearch = (e: KeyboardEvent<HTMLInputElement>) => {
         e.code === "Enter" && searchForUser()
@@ -124,20 +122,17 @@ export const SideBar = () => {
         dispatch({type: "CHANGE_USER", payload: userInfo})
     }
 
-    return <Stack
-        hideBelow={"799px"}
-        borderRightWidth={"1px"}
-        borderRightColor="#0A121B"
-        h="100vh"
-        >
+    return <Stack hideBelow={"799px"}
+                  borderRightWidth={"1px"}
+                  borderRightColor="#0A121B"
+                  h="100vh">
         <Flex p={3}
               alignItems={"center"}
               gap={4}
               justifyContent={"space-between"}>
-            <HamburgerIcon
-                boxSize={9}
-                cursor={"pointer"}
-                color="#5A6670"/>
+            <HamburgerIcon boxSize={9}
+                           cursor={"pointer"}
+                           color="#5A6670"/>
             <InputGroup>
                 <Input borderRadius={"3xl"}
                        bg="#242F3D"
@@ -155,29 +150,22 @@ export const SideBar = () => {
                     <Search2Icon color="#5A6670"/>
                 </InputLeftElement>
             </InputGroup>
-
-
         </Flex>
-
         <Stack style={{scrollbarWidth: "thin"}}
                overflowY="auto"
-               overflowX="hidden"
-        >
-
-            {foundUser &&
-
-                <Flex p={2}
-                      onClick={() => selectFoundUser(foundUser)}
-                      _hover={{backgroundColor: "#202B36"}}
-                      cursor={"pointer"}>
-                    <Avatar src={foundUser.photoUrl ?? undefined}/>
-                    <Box ml='3'>
-                        <Text color="#F5F5F5"
-                              fontWeight='semibold'>
-                            {foundUser.displayName}
-                        </Text>
-                    </Box>
-                </Flex>
+               overflowX="hidden">
+            {foundUser && <Flex p={2}
+                                onClick={() => selectFoundUser(foundUser)}
+                                _hover={{backgroundColor: "#202B36"}}
+                                cursor={"pointer"}>
+                <Avatar src={foundUser.photoUrl ?? undefined}/>
+                <Box ml='3'>
+                    <Text color="#F5F5F5"
+                          fontWeight='semibold'>
+                        {foundUser.displayName}
+                    </Text>
+                </Box>
+            </Flex>
             }
             {foundUser && <Divider/>}
             {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
@@ -202,10 +190,6 @@ export const SideBar = () => {
                     </Box>
                 </Flex>
             )}
-
         </Stack>
-
-
     </Stack>
-
 };

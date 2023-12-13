@@ -26,19 +26,15 @@ export const MessagesBlock = () => {
         })
         return () => unSub()
     }, [state.chatId]);
-
-
-
     const reference = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        reference.current&&reference.current.scrollIntoView({ behavior: "smooth" });
+        reference.current && reference.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
-    return <div >
+    return <div>
         {messages.map(message =>
-            <Message type={message.senderId === user!.uid
-                ? "right"
-                : "left"}
+            <Message key={message.id}
+                     position={message.senderId === user!.uid ? "right" : "left"}
                      message={message}
             />)}
         <div ref={reference}></div>
