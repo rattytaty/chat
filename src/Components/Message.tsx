@@ -28,7 +28,7 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
 
     return <Flex flexDirection={position === "left" ? "row" : "row-reverse"}
                  m={1}
-                 alignItems={"center"}
+                 alignItems="end"
                  justifyContent={position}>
         <Text color="#5A6670"
               m={2}>{messageTime}</Text>

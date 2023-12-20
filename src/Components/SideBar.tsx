@@ -16,7 +16,18 @@ import {
     where
 } from 'firebase/firestore';
 import {SelectedUserContext} from "../hooks/selectedUserContext";
-import {Avatar, Box, Divider, Flex, Input, InputGroup, InputLeftElement, Stack, Text} from "@chakra-ui/react";
+import {
+    Avatar,
+    Box,
+    Divider,
+    Flex,
+    Input,
+    InputGroup,
+    InputLeftElement,
+    Stack,
+    Text,
+    useMediaQuery
+} from "@chakra-ui/react";
 import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
 
 type foundUser = {
@@ -121,10 +132,12 @@ export const SideBar = () => {
     }) => {
         dispatch({type: "CHANGE_USER", payload: userInfo})
     }
+    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
-    return <Stack hideBelow={"799px"}
+    return <Stack hidden={!isLargerThan800}
                   borderRightWidth={"1px"}
                   borderRightColor="#0A121B"
+                  bg="#17212B"
                   h="100vh">
         <Flex p={3}
               alignItems={"center"}

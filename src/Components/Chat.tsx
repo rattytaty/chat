@@ -8,6 +8,7 @@ import {db, storage} from "../firebase";
 import {v4} from "uuid";
 import {arrayUnion, doc, Timestamp, updateDoc} from "firebase/firestore";
 import {useUser} from "../hooks/useUser";
+import {ChatInfo} from "./ChatInfo";
 
 export const Chat: React.FC = React.memo(() => {
     const {state} = useContext(SelectedUserContext)
@@ -52,11 +53,17 @@ export const Chat: React.FC = React.memo(() => {
         setImg(null)
         setMsgText("")
     }
-    return  <Box >
-        {state.chatId && <Box >
+
+    return <Box>
+        {state.chatId && <Box h="100vh"
+                              overflow="auto">
+            <ChatInfo/>
             <MessagesBlock/>
-            <Box  p={1}
-                  bg="#17212B">
+            <Box display="flex"
+                 alignItems="center"
+                 h="60px"
+                 p={1}
+                 bg="#17212B">
                 <input type="file"
                        style={{display: "none"}}
                        id="file"
@@ -65,20 +72,19 @@ export const Chat: React.FC = React.memo(() => {
                                setImg(event.currentTarget.files[0])
                            }
                        }}/>
-                <InputGroup
-                    size={"lg"}
-                    border={"none"}>
+                <InputGroup size="lg"
+                            border="none">
                     <InputLeftAddon _hover={{color: "#F5F5F5"}}
-                                    border={"none"}
-                                    bg={"none"}
-                                    cursor={"pointer"}
+                                    border="none"
+                                    bg="none"
+                                    cursor="pointer"
                                     color="#5A6670"
                                     children={<label htmlFor="file"><AttachmentIcon boxSize={7}/></label>}/>
-                    <Input borderStyle={"none"}
+                    <Input borderStyle="none"
                            color="#F5F5F5"
                            focusBorderColor="#17212B"
                            _hover={{borderColor: "none"}}
-                           placeholder="Write down a message..."
+                           placeholder="Write a message..."
                            value={msgText}
                            onChange={event => setMsgText(event.currentTarget.value)}
                            onKeyDown={event => event.code === "Enter" && sendMsg()}/>
@@ -94,5 +100,5 @@ export const Chat: React.FC = React.memo(() => {
         </Box>}
 
 
-        </Box>
+    </Box>
 })

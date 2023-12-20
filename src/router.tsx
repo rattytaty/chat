@@ -1,9 +1,10 @@
 import {createBrowserRouter} from "react-router-dom";
 import {LoginPage} from "./Pages/LoginPage";
 import {RegisterPage} from "./Pages/RegisterPage";
-import {ChatPage} from "./Pages/ChatPage";
 import {Layout} from "./Pages/Layout";
 import SettingsPage from "./Pages/SettingsPage";
+import {Chat} from "./Components/Chat";
+import React from "react";
 
 export const router = createBrowserRouter([
     {
@@ -13,20 +14,20 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <ChatPage/>
-            },
-            {
-                path: "/login",
-                element: <LoginPage/>,
-            },
-            {
-                path: "/register",
-                element: <RegisterPage/>,
+                element: <Chat/>
             },
             {
                 path: "/settings",
                 element: <SettingsPage/>,
             }
         ]
+    },
+    {
+        path: "/login",
+        element: <LoginPage/>,
+    },
+    {
+        path: "/register",
+        element: <RegisterPage/>,
     }
 ])

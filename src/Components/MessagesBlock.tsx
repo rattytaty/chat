@@ -4,6 +4,7 @@ import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../firebase";
 import {useUser} from "../hooks/useUser";
 import {Message} from "./Message";
+import {Box} from "@chakra-ui/react";
 
 export type message = {
     date: {
@@ -31,12 +32,16 @@ export const MessagesBlock = () => {
         reference.current && reference.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
-    return <div>
+    return <Box height="calc(100vh - 130px)"
+                flexDirection="column"
+                overscrollBehaviorY="none"
+                style={{scrollbarWidth: "thin"}}
+                overflowY="auto">
         {messages.map(message =>
             <Message key={message.id}
                      position={message.senderId === user!.uid ? "right" : "left"}
                      message={message}
             />)}
         <div ref={reference}></div>
-    </div>
+    </Box>
 };
