@@ -1,3 +1,11 @@
-chat app with firebase;
+Project is hosted on Vercel: https://chat-vert-eight.vercel.app/
 
-just quickly testing some features, chat works ok, but without detailed development
+(In progress...)
+
+Сhat app using:
+
+React
+TypeScript
+react-router-dom v6
+Chakra UI
+Firebase
