@@ -90,15 +90,13 @@ export const Chat: React.FC = React.memo(() => {
                            onKeyDown={event => event.code === "Enter" && sendMsg()}/>
                     <InputRightAddon onClick={sendMsg}
                                      _hover={{color: "#F5F5F5"}}
-                                     border={"none"}
-                                     bg={"none"}
-                                     cursor={"pointer"}
+                                     border="none"
+                                     bg="none"
+                                     cursor="pointer"
                                      color="#5A6670"
                                      children={<ArrowForwardIcon boxSize={7}/>}/>
                 </InputGroup>
             </Box>
         </Box>}
-
-
     </Box>
 })

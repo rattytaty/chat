@@ -133,27 +133,29 @@ export const SideBar = () => {
         dispatch({type: "CHANGE_USER", payload: userInfo})
     }
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
+    const isSmallerThan800 = !isLargerThan800
+    const {state} = useContext(SelectedUserContext)
 
-    return <Stack hidden={!isLargerThan800}
-                  borderRightWidth={"1px"}
+    return <Stack hidden={state.chatId?isSmallerThan800:false}
+                  borderRightWidth="1px"
                   borderRightColor="#0A121B"
                   bg="#17212B"
                   h="100vh">
         <Flex p={3}
-              alignItems={"center"}
+              alignItems="center"
               gap={4}
-              justifyContent={"space-between"}>
+              justifyContent="space-between">
             <HamburgerIcon boxSize={9}
-                           cursor={"pointer"}
+                           cursor="pointer"
                            color="#5A6670"/>
             <InputGroup>
-                <Input borderRadius={"3xl"}
+                <Input borderRadius="3xl"
                        bg="#242F3D"
                        _hover={{borderColor: "#17212B"}}
                        borderColor="#17212B"
                        focusBorderColor="#17212B"
                        textColor="#F5F5F5"
-                       size={"md"}
+                       size="md"
                        placeholder="Search User"
                        value={userForSearch}
                        onChange={e => setUserForSearch(e.currentTarget.value)}
@@ -170,11 +172,11 @@ export const SideBar = () => {
             {foundUser && <Flex p={2}
                                 onClick={() => selectFoundUser(foundUser)}
                                 _hover={{backgroundColor: "#202B36"}}
-                                cursor={"pointer"}>
+                                cursor="ponter">
                 <Avatar src={foundUser.photoUrl ?? undefined}/>
-                <Box ml='3'>
+                <Box ml="3">
                     <Text color="#F5F5F5"
-                          fontWeight='semibold'>
+                          fontWeight="semibold">
                         {foundUser.displayName}
                     </Text>
                 </Box>
@@ -186,11 +188,11 @@ export const SideBar = () => {
                       onClick={() => selectChat(chat[1].userInfo)}
                       key={chat[0]}
                       _hover={{backgroundColor: "#202B36"}}
-                      cursor={"pointer"}>
+                      cursor="pointer">
                     <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
                     <Box ml='3'>
                         <Text color="#F5F5F5"
-                              fontWeight='semibold'>
+                              fontWeight="semibold">
                             {chat[1].userInfo.displayName}
                         </Text>
                         {chat[1].lastMessage && <Text
@@ -198,7 +200,7 @@ export const SideBar = () => {
                             whiteSpace="nowrap"
                             width="200px"
                             textOverflow="ellipsis"
-                            fontSize='sm'
+                            fontSize="sm"
                             color="#5A6670">{chat[1].lastMessage.msgText}</Text>}
                     </Box>
                 </Flex>
