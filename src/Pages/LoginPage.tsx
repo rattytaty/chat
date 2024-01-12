@@ -23,6 +23,7 @@ import {
     useColorMode
 } from '@chakra-ui/react';
 import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons';
+import {FormLayout} from "../Components/FormLayout";
 
 type formData = {
     email: string,
@@ -72,102 +73,90 @@ export const LoginPage = () => {
      />
      */
 
-    return <div>
-        <Flex flexDirection="column"
-              width="100wh"
-              height="100vh"
-              backgroundColor="#0E1621"
-              justifyContent="center"
-              alignItems="center">
-            <Stack flexDir="column"
-                   mb="2"
-                   justifyContent="center"
-                   alignItems="center">
-                <Heading color="#6AB3F3">Chat app</Heading>
-                <Box minW={{base: "90%", md: "468px"}}>
-                    <form onSubmit={handleFormSubmit}>
-                        <Stack borderRadius="xl"
-                               spacing={4}
-                               p="1rem"
-                               backgroundColor="#242F3D"
-                               boxShadow="md"
-                               alignItems="center">
-                            <Heading color="#F5F5F5">Login</Heading>
-                            <Avatar/>
-                            <FormControl>
-                                <InputGroup>
-                                    <Input type="email"
-                                        placeholder="Email"
-                                        id="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
-                                        color="#F5F5F5"
-                                        bg="#1B2734"/>
-                                </InputGroup>
-                            </FormControl>
-                            <FormControl>
-                                <InputGroup>
-                                    <Input color="#F5F5F5"
-                                        bg="#1B2734"
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Password"
-                                        id="password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}/>
-                                    <InputRightElement width="4.5rem"
-                                                       onClick={handleShowClick}>
-                                        {showPassword
-                                            ? <ViewOffIcon color="#F5F5F5"/>
-                                            : <ViewIcon color="#F5F5F5"/>}
-                                    </InputRightElement>
-                                </InputGroup>
-                                <FormHelperText justifyContent={"center"}
-                                                color="gray.300">
-                                    <Text textAlign={"center"}>Log in to existing acc:</Text>
-                                    <Flex direction='row'
-                                          justifyContent={"center"}
-                                          textAlign={"center"}
-                                          p={4}
-                                          gap={6}>
-                                        <Flex direction='column'
-                                              p={2}
-                                              cursor={"pointer"}
-                                              onClick={() => {
-                                            setFormData({email: "johndoe@gmail.com", password: "JohnDoe"})
-                                        }}>
-                                            <Text>johndoe@gmail.com</Text>
-                                            <Text>JohnDoe</Text>
-                                        </Flex>
-                                        <Center height='60px'>
-                                            <Divider orientation='vertical'/>
-                                        </Center>
-                                        <Flex direction='column'
-                                              p={2}
-                                              cursor={"pointer"}
-                                              onClick={() => {
-                                            setFormData({email: "janedoe@gmail.com", password: "JaneDoe"})
-                                        }}>
-                                            <Text>janedoe@gmail.com</Text>
-                                            <Text>JaneDoe</Text>
-                                        </Flex>
-                                    </Flex>
-                                </FormHelperText>
-                            </FormControl>
-                            <Button borderRadius={5}
-                                    type="submit"
-                                    variant="solid"
-                                    bg="#6AB3F3"
-                                    width="full">Login</Button>
-                        </Stack>
-                    </form>
-                </Box>
-            </Stack>
-            <ChakraLink color={"#F5F5F5"} as={ReactRouterLink} to='/register'>
-                Or create a new account.
-            </ChakraLink>
-        </Flex>
+    return <FormLayout>
+        <Heading color="#F5F5F5">Login</Heading>
+        <Avatar/>
+        <form onSubmit={handleFormSubmit}>
+            <Input type="email"
+                   placeholder="Email"
+                   id="email"
+                   name="email"
+                   value={formData.email}
+                   mb={4}
+                   onChange={handleChange}
 
-    </div>
+                   borderStyle="none"
+                   color="#F5F5F5"
+                   focusBorderColor="#0A121B"
+                   _hover={{borderColor: "none"}}
+                   bg="#1B2734"
+
+            />
+            <FormControl>
+                <InputGroup>
+                    <Input type={showPassword ? "text" : "password"}
+                           placeholder="Password"
+                           id="password"
+                           name="password"
+                           value={formData.password}
+                           onChange={handleChange}
+                           borderStyle="none"
+                           color="#F5F5F5"
+                           focusBorderColor="#0A121B"
+                           _hover={{borderColor: "none"}}
+                           bg="#1B2734"
+                    />
+                    <InputRightElement width="4.5rem"
+                                       onClick={handleShowClick}>
+                        {showPassword
+                            ? <ViewOffIcon color="#F5F5F5"/>
+                            : <ViewIcon color="#F5F5F5"/>}
+                    </InputRightElement>
+                </InputGroup>
+                <FormHelperText justifyContent={"center"}
+                                color="gray.300">
+                    <Text textAlign={"center"}>Login to existing acc:</Text>
+                    <Flex direction='row'
+                          justifyContent={"center"}
+                          textAlign={"center"}
+                          p={4}
+                          gap={6}>
+                        <Flex direction='column'
+                              p={2}
+                              cursor={"pointer"}
+                              onClick={() => {
+                                  setFormData({email: "johndoe@gmail.com", password: "JohnDoe"})
+                              }}>
+                            <Text>johndoe@gmail.com</Text>
+                            <Text>JohnDoe</Text>
+                        </Flex>
+                        <Center height='60px'>
+                            <Divider orientation='vertical'/>
+                        </Center>
+                        <Flex direction='column'
+                              p={2}
+                              cursor={"pointer"}
+                              onClick={() => {
+                                  setFormData({email: "janedoe@gmail.com", password: "JaneDoe"})
+                              }}>
+                            <Text>janedoe@gmail.com</Text>
+                            <Text>JaneDoe</Text>
+                        </Flex>
+                    </Flex>
+                </FormHelperText>
+            </FormControl>
+            <Button borderRadius={5}
+                    type="submit"
+                    variant="solid"
+                    bg="#2b5278"
+                    _hover={{backgroundColor: "#3971a8"}}
+                    color="#F5F5F5"
+                    width="full">
+                Login</Button>
+        </form>
+        <ChakraLink color="#F5F5F5"
+                    as={ReactRouterLink}
+                    to='/register'>
+            Or create a new account.</ChakraLink>
+    </FormLayout>
 };

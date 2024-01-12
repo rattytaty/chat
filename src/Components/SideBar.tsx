@@ -1,8 +1,6 @@
 import React, {KeyboardEvent, useContext, useEffect, useState} from 'react';
 import {useUser} from "../hooks/useUser";
-import {auth, db} from "../firebase";
-import {signOut} from 'firebase/auth';
-import {useNavigate} from "react-router-dom";
+import {db} from "../firebase";
 import {
     collection,
     doc,
@@ -26,9 +24,11 @@ import {
     InputLeftElement,
     Stack,
     Text,
+    useDisclosure,
     useMediaQuery
 } from "@chakra-ui/react";
 import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
+import {SideBarDrawer} from "./SideBarDrawer";
 
 type foundUser = {
     displayName: string
@@ -55,13 +55,9 @@ interface chat {
 export const SideBar = () => {
 
     const {dispatch} = useContext(SelectedUserContext)
-    const navigate = useNavigate()
+
     const user = useUser()
-    const logOutHandler = () => {
-        signOut(auth).then(() =>
-            navigate("/login")
-        )
-    }
+
     const [userForSearch, setUserForSearch] = useState("");
     const [foundUser, setFoundUser] = useState<foundUser | null>(null)
     const searchForUser = async () => {
@@ -135,8 +131,9 @@ export const SideBar = () => {
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
     const isSmallerThan800 = !isLargerThan800
     const {state} = useContext(SelectedUserContext)
+    const {isOpen, onOpen, onClose} = useDisclosure()
 
-    return <Stack hidden={state.chatId?isSmallerThan800:false}
+    return <Stack hidden={state.chatId ? isSmallerThan800 : false}
                   borderRightWidth="1px"
                   borderRightColor="#0A121B"
                   bg="#17212B"
@@ -145,9 +142,12 @@ export const SideBar = () => {
               alignItems="center"
               gap={4}
               justifyContent="space-between">
-            <HamburgerIcon boxSize={9}
+            <HamburgerIcon boxSize={7}
                            cursor="pointer"
-                           color="#5A6670"/>
+                           color="#5A6670"
+
+                           onClick={onOpen}
+            />
             <InputGroup>
                 <Input borderRadius="3xl"
                        bg="#242F3D"
@@ -166,6 +166,8 @@ export const SideBar = () => {
                 </InputLeftElement>
             </InputGroup>
         </Flex>
+       <SideBarDrawer isOpen={isOpen}
+                      onClose={onClose}/>
         <Stack style={{scrollbarWidth: "thin"}}
                overflowY="auto"
                overflowX="hidden">

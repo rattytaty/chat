@@ -4,6 +4,7 @@ import {auth, db} from "../firebase";
 import {FirebaseError} from 'firebase/app';
 import {doc, setDoc} from "firebase/firestore";
 import {NavLink, useNavigate} from "react-router-dom";
+import {FormLayout} from "../Components/FormLayout";
 
 type formData = {
     nickname: string,
@@ -51,9 +52,8 @@ export const RegisterPage = () => {
         }
     }
 
-    return <div >
-        <div >
-            <span >Chat App</span>
+    return <FormLayout>
+
             <span >Register</span>
             <form onSubmit={handleFormSubmit}>
                 <input type="text"
@@ -77,6 +77,5 @@ export const RegisterPage = () => {
                 <button type="submit">Sign in</button>
             </form>
             <NavLink to="/login">Have an account already?</NavLink>
-        </div>
-    </div>
+    </FormLayout>
 };

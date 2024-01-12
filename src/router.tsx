@@ -15,10 +15,6 @@ export const router = createBrowserRouter([
             {
                 index: true,
                 element: <Chat/>
-            },
-            {
-                path: "/settings",
-                element: <SettingsPage/>,
             }
         ]
     },
@@ -29,5 +25,9 @@ export const router = createBrowserRouter([
     {
         path: "/register",
         element: <RegisterPage/>,
+    },
+    {
+        path: "/settings",
+        element: <SettingsPage/>,
     }
 ])
