@@ -1,4 +1,4 @@
-import {createContext, useReducer} from "react";
+import {createContext, Dispatch, ReactNode, useReducer} from "react";
 import {useUser} from "./useUser";
 
 const initialState: state = {
@@ -20,7 +20,7 @@ type state = {
 
 
 
-export const SelectedUserContext = createContext({}as {state:state, dispatch:React.Dispatch<actionType>})
+export const SelectedUserContext = createContext({}as {state:state, dispatch:Dispatch<actionType>})
 
 type actionType = {
     type: string
@@ -31,7 +31,7 @@ type actionType = {
     }}
 
 
-export const SelectedUserContextProvider = (props: { children: React.ReactNode }) => {
+export const SelectedUserContextProvider = (props: { children:ReactNode }) => {
     const user = useUser()
     const reducer = (state: state, action: actionType): state => {
         switch (action.type) {
@@ -41,6 +41,14 @@ export const SelectedUserContextProvider = (props: { children: React.ReactNode }
                     chatId: user!.uid > action.payload.uid
                         ? user!.uid + action.payload.uid
                         : action.payload.uid + user!.uid
+                }
+            case "BACK_HOME":
+                return {chatId:null,
+                chatUser:action.payload as {
+                    uid: string
+                    photoUrl: string | null
+                    displayName: string
+                }
                 }
             default:
                 return state

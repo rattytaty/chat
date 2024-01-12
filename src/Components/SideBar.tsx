@@ -145,7 +145,7 @@ export const SideBar = () => {
             <HamburgerIcon boxSize={7}
                            cursor="pointer"
                            color="#5A6670"
-
+                           _hover={{color: "#F5F5F5"}}
                            onClick={onOpen}
             />
             <InputGroup>
