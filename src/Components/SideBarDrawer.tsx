@@ -8,25 +8,24 @@ import {
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
-    DrawerFooter,
     DrawerHeader,
     DrawerOverlay,
+    Flex,
     Text,
     useMediaQuery
 } from "@chakra-ui/react";
-import {AtSignIcon, Icon} from "@chakra-ui/icons";
+import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
 import {signOut} from "firebase/auth";
 import {auth} from "../firebase";
 import {useUser} from "../hooks/useUser";
 import {useNavigate} from "react-router-dom";
 
 type SideBarDrawerProps = {
-    isOpen:boolean
-    onClose:()=>void
+    isOpen: boolean
+    onClose: () => void
 }
 
-export const SideBarDrawer : React.FC<SideBarDrawerProps> = React.memo(({isOpen, onClose}
-
+export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, onClose}
 ) => {
     const navigate = useNavigate()
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
@@ -37,13 +36,13 @@ export const SideBarDrawer : React.FC<SideBarDrawerProps> = React.memo(({isOpen,
     }
     const user = useUser()
 
-    return  <Drawer size={isLargerThan800 ? "xs" : "full"}
-                    isOpen={isOpen}
-                    placement='left'
-                    onClose={onClose}
-                   >
+    return <Drawer size={isLargerThan800 ? "xs" : "full"}
+                   isOpen={isOpen}
+                   placement='left'
+                   onClose={onClose}
+    >
         <DrawerOverlay/>
-        <DrawerContent bg="#17212B"
+        <DrawerContent bg="secondaryBg"
                        borderRightWidth="1px"
                        borderRightColor="#0A121B">
             <DrawerCloseButton color="#5A6670"/>
@@ -75,11 +74,23 @@ export const SideBarDrawer : React.FC<SideBarDrawerProps> = React.memo(({isOpen,
                 </Box>
             </DrawerHeader>
             <Divider borderColor="#0A121B"/>
-            <DrawerBody>
-
-
+            <DrawerBody >
+                <Flex mx={-6}
+                      px={8}
+                      py={3}
+                      alignItems="center"
+                      gap={2}
+                      cursor="pointer"
+                      color="text"
+                      onClick={() => {
+                          navigate("/settings")
+                }}
+                      _hover={{backgroundColor: "#202B36"}}>
+                    <SettingsIcon mr={2}
+                                  boxSize={5}/>
+                    <Text>Settings</Text>
+                </Flex>
             </DrawerBody>
-            <DrawerFooter>Footer</DrawerFooter>
         </DrawerContent>
     </Drawer>
 })

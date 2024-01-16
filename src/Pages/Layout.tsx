@@ -20,13 +20,14 @@ export const Layout = () => {
 
     return <Grid h="100vh"
                  w="100vw"
-                 templateAreas={state.chatId ? `"navBar chat"` : (isLargerThan800 ? `"navBar chat"` : `"navBar"`)}>
-        <GridItem w={state.chatId ? "" : (isLargerThan800 ? "" : "100vw")} area="navBar">
+                 templateAreas={`"navBar chat"`}
+                 gridTemplateColumns={isLargerThan800?"350px 1fr":(state.chatId?"0px 1fr":"1fr 0px")}>
+        <GridItem area="navBar">
             <SideBar/>
         </GridItem>
         <GridItem overflow="hidden"
                   area="chat"
-                  bg="#0E1621">
+                  bg="primaryBg">
             <Outlet/>
         </GridItem>
     </Grid>

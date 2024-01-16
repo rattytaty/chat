@@ -6,8 +6,8 @@ import {auth} from "../firebase";
 import {FirebaseError} from "firebase/app";
 import {
     Avatar,
-    Box,
-    Button, Center,
+    Button,
+    Center,
     Divider,
     Flex,
     FormControl,
@@ -17,10 +17,7 @@ import {
     InputGroup,
     InputRightElement,
     Link as ChakraLink,
-    Stack,
-    Switch,
-    Text,
-    useColorMode
+    Text
 } from '@chakra-ui/react';
 import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons';
 import {FormLayout} from "../Components/FormLayout";
@@ -64,15 +61,6 @@ export const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const handleShowClick = () => setShowPassword(!showPassword);
 
-    /* const {toggleColorMode} = useColorMode();
-     <Switch
-         id="dark_mode"
-         colorScheme="teal"
-         size="lg"
-         onChange={toggleColorMode}
-     />
-     */
-
     return <FormLayout>
         <Heading color="#F5F5F5">Login</Heading>
         <Avatar/>
@@ -84,13 +72,11 @@ export const LoginPage = () => {
                    value={formData.email}
                    mb={4}
                    onChange={handleChange}
-
                    borderStyle="none"
-                   color="#F5F5F5"
+                   color="text"
                    focusBorderColor="#0A121B"
                    _hover={{borderColor: "none"}}
                    bg="#1B2734"
-
             />
             <FormControl>
                 <InputGroup>
@@ -101,7 +87,7 @@ export const LoginPage = () => {
                            value={formData.password}
                            onChange={handleChange}
                            borderStyle="none"
-                           color="#F5F5F5"
+                           color="text"
                            focusBorderColor="#0A121B"
                            _hover={{borderColor: "none"}}
                            bg="#1B2734"

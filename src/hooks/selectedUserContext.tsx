@@ -44,7 +44,7 @@ export const SelectedUserContextProvider = (props: { children:ReactNode }) => {
                 }
             case "BACK_HOME":
                 return {chatId:null,
-                chatUser:action.payload as {
+                chatUser: {} as {
                     uid: string
                     photoUrl: string | null
                     displayName: string

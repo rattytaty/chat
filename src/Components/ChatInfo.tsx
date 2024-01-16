@@ -9,10 +9,9 @@ export const ChatInfo: React.FC = React.memo(() => {
     const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
 
     return <>
-        {state.chatId && <Flex bg="#17212B"
-                               height="70px"
+        {state.chatId && <Flex bg="secondaryBg"
+                               height="50px"
                                alignItems={"center"}>
-
             <ArrowBackIcon boxSize={7}
                            cursor="pointer"
                            color="#5A6670"
@@ -28,10 +27,11 @@ export const ChatInfo: React.FC = React.memo(() => {
                            style={isLargerThan800 ? {display: "none"} : undefined}
             />
             <Avatar mr={4}
+                    size="sm"
                     ml={isLargerThan800 ? 4 : 0}
                     src={state.chatUser.photoUrl ?? undefined}/>
-            <Text color="#F5F5F5"
-                  fontWeight='semibold'>
+            <Text color="text"
+                  fontWeight="semibold">
                 {state.chatUser.displayName}
             </Text>
         </Flex>}

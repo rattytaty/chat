@@ -24,8 +24,7 @@ import {
     InputLeftElement,
     Stack,
     Text,
-    useDisclosure,
-    useMediaQuery
+    useDisclosure
 } from "@chakra-ui/react";
 import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
 import {SideBarDrawer} from "./SideBarDrawer";
@@ -54,9 +53,10 @@ interface chat {
 
 export const SideBar = () => {
 
-    const {dispatch} = useContext(SelectedUserContext)
+    const {dispatch, state} = useContext(SelectedUserContext)
 
     const user = useUser()
+
 
     const [userForSearch, setUserForSearch] = useState("");
     const [foundUser, setFoundUser] = useState<foundUser | null>(null)
@@ -128,17 +128,15 @@ export const SideBar = () => {
     }) => {
         dispatch({type: "CHANGE_USER", payload: userInfo})
     }
-    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
-    const isSmallerThan800 = !isLargerThan800
-    const {state} = useContext(SelectedUserContext)
+
     const {isOpen, onOpen, onClose} = useDisclosure()
 
-    return <Stack hidden={state.chatId ? isSmallerThan800 : false}
-                  borderRightWidth="1px"
+    return <Stack borderRightWidth="1px"
                   borderRightColor="#0A121B"
-                  bg="#17212B"
+                  bg="secondaryBg"
                   h="100vh">
-        <Flex p={3}
+        <Flex px={3}
+              py={2}
               alignItems="center"
               gap={4}
               justifyContent="space-between">
@@ -148,14 +146,14 @@ export const SideBar = () => {
                            _hover={{color: "#F5F5F5"}}
                            onClick={onOpen}
             />
-            <InputGroup>
+            <InputGroup  size="sm">
                 <Input borderRadius="3xl"
                        bg="#242F3D"
-                       _hover={{borderColor: "#17212B"}}
-                       borderColor="#17212B"
-                       focusBorderColor="#17212B"
-                       textColor="#F5F5F5"
-                       size="md"
+                       border="none"
+                       _focusVisible={{
+                           outline: "none",
+                       }}
+                       textColor="text"
                        placeholder="Search User"
                        value={userForSearch}
                        onChange={e => setUserForSearch(e.currentTarget.value)}
@@ -166,8 +164,8 @@ export const SideBar = () => {
                 </InputLeftElement>
             </InputGroup>
         </Flex>
-       <SideBarDrawer isOpen={isOpen}
-                      onClose={onClose}/>
+        <SideBarDrawer isOpen={isOpen}
+                       onClose={onClose}/>
         <Stack style={{scrollbarWidth: "thin"}}
                overflowY="auto"
                overflowX="hidden">
@@ -186,14 +184,16 @@ export const SideBar = () => {
             }
             {foundUser && <Divider/>}
             {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
-                <Flex p={2}
+                <Flex px={2}
+                      py={1}
+                      bg={state.chatUser.uid === chat[1].userInfo.uid ? "#2b5278" : undefined}
                       onClick={() => selectChat(chat[1].userInfo)}
                       key={chat[0]}
                       _hover={{backgroundColor: "#202B36"}}
                       cursor="pointer">
                     <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
                     <Box ml='3'>
-                        <Text color="#F5F5F5"
+                        <Text color="text"
                               fontWeight="semibold">
                             {chat[1].userInfo.displayName}
                         </Text>
@@ -203,7 +203,7 @@ export const SideBar = () => {
                             width="200px"
                             textOverflow="ellipsis"
                             fontSize="sm"
-                            color="#5A6670">{chat[1].lastMessage.msgText}</Text>}
+                            color={state.chatUser.uid === chat[1].userInfo.uid ? "text" : "#5A6670"}>{chat[1].lastMessage.msgText}</Text>}
                     </Box>
                 </Flex>
             )}

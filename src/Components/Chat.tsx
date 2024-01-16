@@ -61,9 +61,9 @@ export const Chat: React.FC = React.memo(() => {
             <MessagesBlock/>
             <Box display="flex"
                  alignItems="center"
-                 h="60px"
+                 h="50px"
                  p={1}
-                 bg="#17212B">
+                 bg="secondaryBg">
                 <input type="file"
                        style={{display: "none"}}
                        id="file"
@@ -74,16 +74,18 @@ export const Chat: React.FC = React.memo(() => {
                        }}/>
                 <InputGroup size="lg"
                             border="none">
-                    <InputLeftAddon _hover={{color: "#F5F5F5"}}
+                    <InputLeftAddon _hover={{color: "#4e5058"}}
                                     border="none"
                                     bg="none"
                                     cursor="pointer"
                                     color="#5A6670"
                                     children={<label htmlFor="file"><AttachmentIcon boxSize={7}/></label>}/>
-                    <Input borderStyle="none"
-                           color="#F5F5F5"
-                           focusBorderColor="#17212B"
-                           _hover={{borderColor: "none"}}
+                    <Input border="none"
+                           borderStyle="none"
+                           _focusVisible={{
+                               outline: "none",
+                           }}
+                           color="text"
                            placeholder="Write a message..."
                            value={msgText}
                            onChange={event => setMsgText(event.currentTarget.value)}

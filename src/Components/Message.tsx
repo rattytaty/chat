@@ -33,7 +33,7 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
         <Text color="#5A6670"
               m={2}>{messageTime}</Text>
         <Text p={2}
-              color="#F5F5F5"
+              color="text"
               maxWidth="75%"
               borderRadius='xl'
               bg={position === "left" ? "#182533" : "#2B5278"}>
