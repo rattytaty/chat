@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {SelectedUserContext} from "../hooks/selectedUserContext";
-import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon} from "@chakra-ui/react";
+import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue} from "@chakra-ui/react";
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
@@ -53,17 +53,22 @@ export const Chat: React.FC = React.memo(() => {
         setImg(null)
         setMsgText("")
     }
+    const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
 
-    return <Box>
-        {state.chatId && <Box h="100vh"
-                              overflow="auto">
+
+    return <Box bg="primaryBg"
+                h="100vh">
+        {state.chatId && <Box overflow="auto">
             <ChatInfo/>
             <MessagesBlock/>
             <Box display="flex"
                  alignItems="center"
-                 h="50px"
+                 h="40px"
                  p={1}
-                 bg="secondaryBg">
+                 bg="secondaryBg"
+                 borderTopWidth="1px"
+                 borderTopColor="borders"
+            >
                 <input type="file"
                        style={{display: "none"}}
                        id="file"
@@ -72,14 +77,14 @@ export const Chat: React.FC = React.memo(() => {
                                setImg(event.currentTarget.files[0])
                            }
                        }}/>
-                <InputGroup size="lg"
+                <InputGroup
                             border="none">
-                    <InputLeftAddon _hover={{color: "#4e5058"}}
+                    <InputLeftAddon  _hover={{color:iconHoverColor}}
                                     border="none"
                                     bg="none"
                                     cursor="pointer"
-                                    color="#5A6670"
-                                    children={<label htmlFor="file"><AttachmentIcon boxSize={7}/></label>}/>
+                                    color="icons"
+                                    children={<label htmlFor="file"><AttachmentIcon cursor="pointer" boxSize={6}/></label>}/>
                     <Input border="none"
                            borderStyle="none"
                            _focusVisible={{
@@ -91,12 +96,12 @@ export const Chat: React.FC = React.memo(() => {
                            onChange={event => setMsgText(event.currentTarget.value)}
                            onKeyDown={event => event.code === "Enter" && sendMsg()}/>
                     <InputRightAddon onClick={sendMsg}
-                                     _hover={{color: "#F5F5F5"}}
+                                     _hover={{color:iconHoverColor}}
                                      border="none"
                                      bg="none"
                                      cursor="pointer"
-                                     color="#5A6670"
-                                     children={<ArrowForwardIcon boxSize={7}/>}/>
+                                     color="icons"
+                                     children={<ArrowForwardIcon boxSize={6}/>}/>
                 </InputGroup>
             </Box>
         </Box>}

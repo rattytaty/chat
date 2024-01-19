@@ -8,10 +8,10 @@ const formatTimeToHHMM = (date: Date) => {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
 }
-const formatToMMDD = (date: Date) => {
+const formatToDDMM = (date: Date) => {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
-    return `${month}.${day}`;
+    return `${day}.${month}`;
 }
 type Message = {
     position: "left" | "right",
@@ -24,7 +24,7 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
     const isToday = todayDate.getDate() === dateOfMessage.getDate() && todayDate.getMonth() === dateOfMessage.getMonth() && todayDate.getFullYear() === dateOfMessage.getFullYear()
     const messageTime = isToday
         ? formatTimeToHHMM(dateOfMessage)
-        : formatToMMDD(dateOfMessage)
+        : formatToDDMM(dateOfMessage)
 
     return <Flex flexDirection={position === "left" ? "row" : "row-reverse"}
                  m={1}
@@ -36,7 +36,7 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
               color="text"
               maxWidth="75%"
               borderRadius='xl'
-              bg={position === "left" ? "#182533" : "#2B5278"}>
+              bg={position === "left" ? "leftMsg" : "rightMsg"}>
             {message.msgText}</Text>
     </Flex>
 })

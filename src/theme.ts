@@ -11,13 +11,34 @@ const theme = extendTheme({
                 _dark: '#F5F5F5',
             },
             primaryBg: {
-                default: '#e3e5e8',
-                _dark: '#0E1621',
+                default: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(150,198,208,1) 100%)',
+                _dark: 'radial-gradient(circle, rgba(14,22,33,1) 0%, rgba(23,38,57,1) 100%)',
             },
-            secondaryBg:{
-                default: '#d2d3db',
+            secondaryBg: {
+                default: '#d1e2ee',
                 _dark: '#17212B',
             },
+            leftMsg: {
+                default: '#6eafce',
+                _dark: '#143a67',
+            },
+            rightMsg: {
+                default: '#5691dc',
+                _dark: '#2B5278',
+            },
+            icons: {
+                default: '#5A6670',
+                _dark: '#5A6670',
+            },
+           borders: {
+               default: '#80888d',
+               _dark: '#0A121B',
+           },
+           inputBg: {
+               default: '#a6cbec',
+               _dark: '#242F3D',
+           }
+
         },
     },
 })

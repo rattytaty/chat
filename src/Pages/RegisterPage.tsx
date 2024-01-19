@@ -8,7 +8,6 @@ import {FormLayout} from "../Components/FormLayout";
 import {Button, FormControl, Heading, Input, InputGroup, InputRightElement, Link as ChakraLink} from "@chakra-ui/react";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 
-
 type formData = {
     nickname: string,
     email: string,
@@ -26,17 +25,14 @@ export const RegisterPage = () => {
         const {name, value} = event.target;
         setFormData(prevFormData => ({...prevFormData, [name]: value}));
     };
-
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const {nickname, email, password} = formData
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password)
-
             await updateProfile(response.user, {
                 displayName: nickname
             })
-
             await setDoc(doc(db, "users", response.user.uid), {
                 displayName: nickname,
                 email,
@@ -44,9 +40,7 @@ export const RegisterPage = () => {
                 photoUrl: null
             });
             await setDoc(doc(db, "usersChats", response.user.uid), {});
-
             navigate("/")
-
         } catch (error) {
             if (error instanceof FirebaseError) {
                 console.log(error)
@@ -59,25 +53,23 @@ export const RegisterPage = () => {
     const handleShowClick = () => setShowPassword(!showPassword);
 
     return <FormLayout>
-        <Heading color="#F5F5F5">Register</Heading>
-
+        <Heading color="text">Register</Heading>
         <form onSubmit={handleFormSubmit}>
-
            {/* <FormControl mb={4}>
                 <FormErrorMessage>Have to be unique.</FormErrorMessage>
                 </FormControl>*/}
-
             <Input placeholder="Nickname"
                    id="nickname"
                    name="nickname"
                    value={formData.nickname}
                    onChange={handleChange}
                    type="text"
-                   borderStyle="none"
-                   color="#F5F5F5"
-                   focusBorderColor="#0A121B"
-                   _hover={{borderColor: "none"}}
-                   bg="#1B2734"
+                   color="text"
+                   border="none"
+                   _focusVisible={{
+                       outline: "none",
+                   }}
+                   bg="inputBg"
                    mb={4}
             />
             <Input type="email"
@@ -86,11 +78,12 @@ export const RegisterPage = () => {
                    name="email"
                    value={formData.email}
                    onChange={handleChange}
-                   borderStyle="none"
-                   color="#F5F5F5"
-                   focusBorderColor="#0A121B"
-                   _hover={{borderColor: "none"}}
-                   bg="#1B2734"
+                   color="text"
+                   border="none"
+                   _focusVisible={{
+                       outline: "none",
+                   }}
+                   bg="inputBg"
                    mb={4}
             />
             <FormControl>
@@ -101,11 +94,12 @@ export const RegisterPage = () => {
                            name="password"
                            value={formData.password}
                            onChange={handleChange}
-                           borderStyle="none"
-                           color="#F5F5F5"
-                           focusBorderColor="#0A121B"
-                           _hover={{borderColor: "none"}}
-                           bg="#1B2734"
+                           color="text"
+                           border="none"
+                           _focusVisible={{
+                               outline: "none",
+                           }}
+                           bg="inputBg"
                            mb={4}
                     />
                     <InputRightElement width="4.5rem"
@@ -124,9 +118,9 @@ export const RegisterPage = () => {
                     _hover={{backgroundColor: "#3971a8"}}
                     color="#F5F5F5"
                     width="full">
-                Login</Button>
+                Register</Button>
         </form>
-        <ChakraLink color="#F5F5F5"
+        <ChakraLink color="#text"
                     as={ReactRouterLink}
                     to="/login">
             Have an account already?</ChakraLink>

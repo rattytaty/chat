@@ -62,7 +62,7 @@ export const LoginPage = () => {
     const handleShowClick = () => setShowPassword(!showPassword);
 
     return <FormLayout>
-        <Heading color="#F5F5F5">Login</Heading>
+        <Heading color="text">Login</Heading>
         <Avatar/>
         <form onSubmit={handleFormSubmit}>
             <Input type="email"
@@ -72,11 +72,12 @@ export const LoginPage = () => {
                    value={formData.email}
                    mb={4}
                    onChange={handleChange}
-                   borderStyle="none"
+                   border="none"
+                   _focusVisible={{
+                       outline: "none",
+                   }}
                    color="text"
-                   focusBorderColor="#0A121B"
-                   _hover={{borderColor: "none"}}
-                   bg="#1B2734"
+                   bg="inputBg"
             />
             <FormControl>
                 <InputGroup>
@@ -86,11 +87,12 @@ export const LoginPage = () => {
                            name="password"
                            value={formData.password}
                            onChange={handleChange}
-                           borderStyle="none"
                            color="text"
-                           focusBorderColor="#0A121B"
-                           _hover={{borderColor: "none"}}
-                           bg="#1B2734"
+                           border="none"
+                           _focusVisible={{
+                               outline: "none",
+                           }}
+                           bg="inputBg"
                     />
                     <InputRightElement width="4.5rem"
                                        onClick={handleShowClick}>
@@ -100,7 +102,7 @@ export const LoginPage = () => {
                     </InputRightElement>
                 </InputGroup>
                 <FormHelperText justifyContent={"center"}
-                                color="gray.300">
+                                color="text">
                     <Text textAlign={"center"}>Login to existing acc:</Text>
                     <Flex direction='row'
                           justifyContent={"center"}
@@ -140,7 +142,7 @@ export const LoginPage = () => {
                     width="full">
                 Login</Button>
         </form>
-        <ChakraLink color="#F5F5F5"
+        <ChakraLink color="text"
                     as={ReactRouterLink}
                     to='/register'>
             Or create a new account.</ChakraLink>

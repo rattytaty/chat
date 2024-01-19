@@ -22,8 +22,8 @@ import {
     Input,
     InputGroup,
     InputLeftElement,
-    Stack,
     Text,
+    useColorModeValue,
     useDisclosure
 } from "@chakra-ui/react";
 import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
@@ -130,31 +130,37 @@ export const SideBar = () => {
     }
 
     const {isOpen, onOpen, onClose} = useDisclosure()
+    const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
+    const selectedChatColor = useColorModeValue('#7eb2e0', '#2b5278')
 
-    return <Stack borderRightWidth="1px"
-                  borderRightColor="#0A121B"
-                  bg="secondaryBg"
-                  h="100vh">
+    const chatHoverColor = useColorModeValue('#adc2ee', '#202B36')
+
+
+    return <Box borderRightWidth="1px"
+                borderRightColor="borders"
+                bg="secondaryBg"
+                h="100vh">
         <Flex px={3}
               py={2}
               alignItems="center"
               gap={4}
-              justifyContent="space-between">
+              justifyContent="space-between"
+              h="60px">
             <HamburgerIcon boxSize={7}
                            cursor="pointer"
-                           color="#5A6670"
-                           _hover={{color: "#F5F5F5"}}
+                           color="icons"
+                           _hover={{color: iconHoverColor}}
                            onClick={onOpen}
             />
-            <InputGroup  size="sm">
+            <InputGroup size="sm">
                 <Input borderRadius="3xl"
-                       bg="#242F3D"
+                       bg="inputBg"
                        border="none"
                        _focusVisible={{
                            outline: "none",
                        }}
                        textColor="text"
-                       placeholder="Search User"
+                       placeholder="Search for a user"
                        value={userForSearch}
                        onChange={e => setUserForSearch(e.currentTarget.value)}
                        onKeyDown={handleUserSearch}
@@ -166,16 +172,16 @@ export const SideBar = () => {
         </Flex>
         <SideBarDrawer isOpen={isOpen}
                        onClose={onClose}/>
-        <Stack style={{scrollbarWidth: "thin"}}
+        <Box style={{scrollbarWidth: "thin"}}
                overflowY="auto"
                overflowX="hidden">
             {foundUser && <Flex p={2}
                                 onClick={() => selectFoundUser(foundUser)}
-                                _hover={{backgroundColor: "#202B36"}}
-                                cursor="ponter">
+                                _hover={{backgroundColor: chatHoverColor}}
+                                cursor="pointer">
                 <Avatar src={foundUser.photoUrl ?? undefined}/>
                 <Box ml="3">
-                    <Text color="#F5F5F5"
+                    <Text color="text"
                           fontWeight="semibold">
                         {foundUser.displayName}
                     </Text>
@@ -186,10 +192,10 @@ export const SideBar = () => {
             {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
                 <Flex px={2}
                       py={1}
-                      bg={state.chatUser.uid === chat[1].userInfo.uid ? "#2b5278" : undefined}
+                      bg={state.chatUser.uid === chat[1].userInfo.uid ? selectedChatColor : undefined}
                       onClick={() => selectChat(chat[1].userInfo)}
                       key={chat[0]}
-                      _hover={{backgroundColor: "#202B36"}}
+                      _hover={{backgroundColor: chatHoverColor}}
                       cursor="pointer">
                     <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
                     <Box ml='3'>
@@ -207,6 +213,6 @@ export const SideBar = () => {
                     </Box>
                 </Flex>
             )}
-        </Stack>
-    </Stack>
+        </Box>
+    </Box>
 };

@@ -32,6 +32,8 @@ export const MessagesBlock = () => {
         reference.current && reference.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
 
+
+
     return <Box height="calc(100vh - 100px)"
                 flexDirection="column"
                 overscrollBehaviorY="none"

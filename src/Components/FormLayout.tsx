@@ -8,10 +8,9 @@ export const FormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => 
         return <Flex flexDirection="column"
                      width="100wh"
                      height="100vh"
-                     backgroundColor="primaryBg"
+                     bg="primaryBg"
                      justifyContent="center"
-                     alignItems="center"
-        >
+                     alignItems="center">
             <Stack flexDir="column"
                    mb="2"
                    justifyContent="center"
@@ -23,7 +22,7 @@ export const FormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => 
                        boxShadow="md"
                        alignItems="center"
                        borderWidth="1px"
-                       borderColor="#0A121B"
+                       borderColor="borders"
                 >
                     {children}
                 </Stack>

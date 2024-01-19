@@ -15,19 +15,17 @@ export const Layout = () => {
         }
     }, [user, navigate])
 
-    const [isLargerThan800] = useMediaQuery('(min-width: 800px)')
+    const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const {state} = useContext(SelectedUserContext)
 
     return <Grid h="100vh"
                  w="100vw"
                  templateAreas={`"navBar chat"`}
-                 gridTemplateColumns={isLargerThan800?"350px 1fr":(state.chatId?"0px 1fr":"1fr 0px")}>
+                 gridTemplateColumns={isLargerThan600?"300px 1fr":(state.chatId?"0px 1fr":"1fr 0px")}>
         <GridItem area="navBar">
             <SideBar/>
         </GridItem>
-        <GridItem overflow="hidden"
-                  area="chat"
-                  bg="primaryBg">
+        <GridItem area="chat" bg="secondaryBg">
             <Outlet/>
         </GridItem>
     </Grid>
