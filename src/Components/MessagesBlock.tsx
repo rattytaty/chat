@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
-import {SelectedUserContext} from "../hooks/selectedUserContext";
+import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../firebase";
-import {useUser} from "../hooks/useUser";
+import {UserContext} from "../hooks/providers/UserContext";
 import {Message} from "./Message";
 import {Box} from "@chakra-ui/react";
 
@@ -18,21 +18,19 @@ export type message = {
 
 export const MessagesBlock = () => {
 
-    const {state} = useContext(SelectedUserContext)
+    const {selectedChat} = useContext(SelectedUserContext)
     const [messages, setMessages] = useState<message[]>([])
-    const user = useUser()
+    const user = useContext(UserContext)
     useEffect(() => {
-        const unSub = onSnapshot(doc(db, "chats", state.chatId as string), (doc) => {
+        const unSub = onSnapshot(doc(db, "chats", selectedChat.chatId as string), (doc) => {
             doc.exists() && setMessages(doc.data().messages as message[])
         })
         return () => unSub()
-    }, [state.chatId]);
+    }, [selectedChat.chatId]);
     const reference = useRef<HTMLDivElement>(null);
     useEffect(() => {
         reference.current && reference.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
-
-
 
     return <Box height="calc(100vh - 100px)"
                 flexDirection="column"
@@ -46,4 +44,4 @@ export const MessagesBlock = () => {
             />)}
         <div ref={reference}></div>
     </Box>
-};
+}

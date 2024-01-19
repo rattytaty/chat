@@ -30,15 +30,14 @@ const theme = extendTheme({
                 default: '#5A6670',
                 _dark: '#5A6670',
             },
-           borders: {
-               default: '#80888d',
-               _dark: '#0A121B',
-           },
-           inputBg: {
-               default: '#a6cbec',
-               _dark: '#242F3D',
-           }
-
+            borders: {
+                default: '#80888d',
+                _dark: '#0A121B',
+            },
+            inputBg: {
+                default: '#8b9aec',
+                _dark: '#242F3D',
+            }
         },
     },
 })

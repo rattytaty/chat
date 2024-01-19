@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
     Avatar,
     Box,
@@ -11,13 +11,14 @@ import {
     DrawerHeader,
     DrawerOverlay,
     Flex,
-    Text, useColorModeValue,
+    Text,
+    useColorModeValue,
     useMediaQuery
 } from "@chakra-ui/react";
 import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
 import {signOut} from "firebase/auth";
 import {auth} from "../firebase";
-import {useUser} from "../hooks/useUser";
+import {UserContext} from "../hooks/providers/UserContext";
 import {useNavigate} from "react-router-dom";
 
 type SideBarDrawerProps = {
@@ -34,13 +35,13 @@ export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, 
             navigate("/login")
         )
     }
-    const user = useUser()
+    const user = useContext(UserContext)
 
     const navigationHoverColor = useColorModeValue('#adc2ee', '#202B36')
 
     return <Drawer size={isLargerThan600 ? "xs" : "full"}
                    isOpen={isOpen}
-                   placement='left'
+                   placement="left"
                    onClose={onClose}>
         <DrawerOverlay/>
         <DrawerContent bg="secondaryBg"
@@ -65,17 +66,18 @@ export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, 
                             _hover={{backgroundColor: "#3971a8"}}
                             color="#F5F5F5"
                             onClick={logOutHandler}
-                            leftIcon={<Icon fill="none" width="18px" height="18px" viewBox="0 0 14 14">
-                                <path
-                                    d="M13.5 7.5L10.5 10.75M13.5 7.5L10.5 4.5M13.5 7.5L4 7.5M8 13.5H1.5L1.5 1.5L8 1.5"
-                                    stroke="#F5F5F5"
-                                />
+                            leftIcon={<Icon fill="none"
+                                            width="18px"
+                                            height="18px"
+                                            viewBox="0 0 14 14">
+                                <path d="M13.5 7.5L10.5 10.75M13.5 7.5L10.5 4.5M13.5 7.5L4 7.5M8 13.5H1.5L1.5 1.5L8 1.5"
+                                      stroke="#F5F5F5"/>
                             </Icon>}
                     >Logout</Button>
                 </Box>
             </DrawerHeader>
             <Divider borderColor="borders"/>
-            <DrawerBody >
+            <DrawerBody>
                 <Flex mx={-6}
                       px={8}
                       py={3}
@@ -83,8 +85,8 @@ export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, 
                       gap={2}
                       cursor="pointer"
                       color="text"
-                      onClick={() =>navigate("/settings")
-                }
+                      onClick={() => navigate("/settings")
+                      }
                       _hover={{backgroundColor: navigationHoverColor}}>
                     <SettingsIcon mr={2}
                                   boxSize={5}/>

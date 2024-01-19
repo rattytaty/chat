@@ -1,5 +1,5 @@
 import React, {useContext, useState} from 'react';
-import {SelectedUserContext} from "../hooks/selectedUserContext";
+import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue} from "@chakra-ui/react";
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
@@ -7,21 +7,22 @@ import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
 import {db, storage} from "../firebase";
 import {v4} from "uuid";
 import {arrayUnion, doc, Timestamp, updateDoc} from "firebase/firestore";
-import {useUser} from "../hooks/useUser";
+import {UserContext} from "../hooks/providers/UserContext";
 import {ChatInfo} from "./ChatInfo";
 
 export const Chat: React.FC = React.memo(() => {
-    const {state} = useContext(SelectedUserContext)
-    const user = useUser()
+    const {selectedChat} = useContext(SelectedUserContext)
+    const user = useContext(UserContext)
     const [msgText, setMsgText] = useState("")
     const [img, setImg] = useState<File | null>(null)
+
     const sendMsg = async () => {
         if (img) {
             const storageRef = ref(storage, v4())
             const uploadImg = uploadBytesResumable(storageRef, img)
             uploadImg.on("state_changed", () => {
                 getDownloadURL(uploadImg.snapshot.ref).then(async (downloadURL) => {
-                    await updateDoc(doc(db, "chats", state.chatId as string), {
+                    await updateDoc(doc(db, "chats", selectedChat.chatId as string), {
                         messages: arrayUnion({
                             id: v4(),
                             msgText,
@@ -33,7 +34,7 @@ export const Chat: React.FC = React.memo(() => {
                 })
             })
         } else {
-            await updateDoc(doc(db, "chats", state.chatId as string), {
+            await updateDoc(doc(db, "chats", selectedChat.chatId as string), {
                 messages: arrayUnion({
                     id: v4(),
                     msgText,
@@ -43,22 +44,21 @@ export const Chat: React.FC = React.memo(() => {
             })
         }
         await Promise.allSettled([await updateDoc(doc(db, "usersChats", user!.uid), {
-            [state.chatId + ".lastMessage"]: {msgText},
-            [state.chatId + ".date"]: Timestamp.now()
+            [selectedChat.chatId + ".lastMessage"]: {msgText},
+            [selectedChat.chatId + ".date"]: Timestamp.now()
         }),
-            await updateDoc(doc(db, "usersChats", state.chatUser.uid), {
-                [state.chatId + ".lastMessage"]: {msgText},
-                [state.chatId + ".date"]: Timestamp.now()
+            await updateDoc(doc(db, "usersChats", selectedChat.chatUser.uid), {
+                [selectedChat.chatId + ".lastMessage"]: {msgText},
+                [selectedChat.chatId + ".date"]: Timestamp.now()
             })])
         setImg(null)
         setMsgText("")
     }
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
 
-
     return <Box bg="primaryBg"
                 h="100vh">
-        {state.chatId && <Box overflow="auto">
+        {selectedChat.chatId && <Box overflow="auto">
             <ChatInfo/>
             <MessagesBlock/>
             <Box display="flex"
@@ -67,8 +67,7 @@ export const Chat: React.FC = React.memo(() => {
                  p={1}
                  bg="secondaryBg"
                  borderTopWidth="1px"
-                 borderTopColor="borders"
-            >
+                 borderTopColor="borders">
                 <input type="file"
                        style={{display: "none"}}
                        id="file"
@@ -77,14 +76,14 @@ export const Chat: React.FC = React.memo(() => {
                                setImg(event.currentTarget.files[0])
                            }
                        }}/>
-                <InputGroup
-                            border="none">
-                    <InputLeftAddon  _hover={{color:iconHoverColor}}
+                <InputGroup border="none">
+                    <InputLeftAddon _hover={{color: iconHoverColor}}
                                     border="none"
                                     bg="none"
                                     cursor="pointer"
                                     color="icons"
-                                    children={<label htmlFor="file"><AttachmentIcon cursor="pointer" boxSize={6}/></label>}/>
+                                    children={<label htmlFor="file"><AttachmentIcon cursor="pointer"
+                                                                                    boxSize={6}/></label>}/>
                     <Input border="none"
                            borderStyle="none"
                            _focusVisible={{
@@ -96,7 +95,7 @@ export const Chat: React.FC = React.memo(() => {
                            onChange={event => setMsgText(event.currentTarget.value)}
                            onKeyDown={event => event.code === "Enter" && sendMsg()}/>
                     <InputRightAddon onClick={sendMsg}
-                                     _hover={{color:iconHoverColor}}
+                                     _hover={{color: iconHoverColor}}
                                      border="none"
                                      bg="none"
                                      cursor="pointer"

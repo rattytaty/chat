@@ -1,5 +1,5 @@
 import React, {KeyboardEvent, useContext, useEffect, useState} from 'react';
-import {useUser} from "../hooks/useUser";
+import {UserContext} from "../hooks/providers/UserContext";
 import {db} from "../firebase";
 import {
     collection,
@@ -13,7 +13,7 @@ import {
     updateDoc,
     where
 } from 'firebase/firestore';
-import {SelectedUserContext} from "../hooks/selectedUserContext";
+import {selectedUser, SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {
     Avatar,
     Box,
@@ -42,22 +42,15 @@ interface chat {
             second: number
             nanoseconds: number
         }
-        userInfo: {
-            uid: string
-            photoUrl: string | null
-            displayName: string
-        }
+        userInfo: selectedUser
         lastMessage: { msgText: string }
     }
 }
 
 export const SideBar = () => {
 
-    const {dispatch, state} = useContext(SelectedUserContext)
-
-    const user = useUser()
-
-
+    const {selectedChat, dispatch} = useContext(SelectedUserContext)
+    const user = useContext(UserContext)
     const [userForSearch, setUserForSearch] = useState("");
     const [foundUser, setFoundUser] = useState<foundUser | null>(null)
     const searchForUser = async () => {
@@ -74,11 +67,7 @@ export const SideBar = () => {
     const handleUserSearch = (e: KeyboardEvent<HTMLInputElement>) => {
         e.code === "Enter" && searchForUser()
     }
-    const selectFoundUser = async (userInfo: {
-        uid: string
-        photoUrl: string | null
-        displayName: string
-    }) => {
+    const selectFoundUser = async (userInfo: selectedUser) => {
         const combinedId = user!.uid > foundUser!.uid
             ? user!.uid + foundUser!.uid
             : foundUser!.uid + user!.uid
@@ -159,6 +148,7 @@ export const SideBar = () => {
                        _focusVisible={{
                            outline: "none",
                        }}
+                       _placeholder={{color: "#F5F5F5"}}
                        textColor="text"
                        placeholder="Search for a user"
                        value={userForSearch}
@@ -173,8 +163,8 @@ export const SideBar = () => {
         <SideBarDrawer isOpen={isOpen}
                        onClose={onClose}/>
         <Box style={{scrollbarWidth: "thin"}}
-               overflowY="auto"
-               overflowX="hidden">
+             overflowY="auto"
+             overflowX="hidden">
             {foundUser && <Flex p={2}
                                 onClick={() => selectFoundUser(foundUser)}
                                 _hover={{backgroundColor: chatHoverColor}}
@@ -192,7 +182,7 @@ export const SideBar = () => {
             {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
                 <Flex px={2}
                       py={1}
-                      bg={state.chatUser.uid === chat[1].userInfo.uid ? selectedChatColor : undefined}
+                      bg={selectedChat.chatUser.uid === chat[1].userInfo.uid ? selectedChatColor : undefined}
                       onClick={() => selectChat(chat[1].userInfo)}
                       key={chat[0]}
                       _hover={{backgroundColor: chatHoverColor}}
@@ -209,7 +199,7 @@ export const SideBar = () => {
                             width="200px"
                             textOverflow="ellipsis"
                             fontSize="sm"
-                            color={state.chatUser.uid === chat[1].userInfo.uid ? "text" : "#5A6670"}>{chat[1].lastMessage.msgText}</Text>}
+                            color={selectedChat.chatUser.uid === chat[1].userInfo.uid ? "text" : "#5A6670"}>{chat[1].lastMessage.msgText}</Text>}
                     </Box>
                 </Flex>
             )}

@@ -5,6 +5,7 @@ type FormLayoutProps = {
     children: React.ReactNode
 }
 export const FormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => {
+
         return <Flex flexDirection="column"
                      width="100wh"
                      height="100vh"
@@ -22,8 +23,7 @@ export const FormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => 
                        boxShadow="md"
                        alignItems="center"
                        borderWidth="1px"
-                       borderColor="borders"
-                >
+                       borderColor="borders">
                     {children}
                 </Stack>
             </Stack>

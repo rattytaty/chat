@@ -1,6 +1,6 @@
-import React, {ChangeEvent, FormEvent, useEffect, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react';
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
-import {useUser} from "../hooks/useUser";
+import {UserContext} from "../hooks/providers/UserContext";
 import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../firebase";
 import {FirebaseError} from "firebase/app";
@@ -28,7 +28,7 @@ type formData = {
 }
 export const LoginPage = () => {
 
-    const user = useUser()
+    const user = useContext(UserContext)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -76,6 +76,7 @@ export const LoginPage = () => {
                    _focusVisible={{
                        outline: "none",
                    }}
+                   _placeholder={{color:"#F5F5F5"}}
                    color="text"
                    bg="inputBg"
             />
@@ -92,6 +93,7 @@ export const LoginPage = () => {
                            _focusVisible={{
                                outline: "none",
                            }}
+                           _placeholder={{color:"#F5F5F5"}}
                            bg="inputBg"
                     />
                     <InputRightElement width="4.5rem"
@@ -101,29 +103,29 @@ export const LoginPage = () => {
                             : <ViewIcon color="#F5F5F5"/>}
                     </InputRightElement>
                 </InputGroup>
-                <FormHelperText justifyContent={"center"}
+                <FormHelperText justifyContent="center"
                                 color="text">
-                    <Text textAlign={"center"}>Login to existing acc:</Text>
-                    <Flex direction='row'
-                          justifyContent={"center"}
-                          textAlign={"center"}
+                    <Text textAlign="center">Login to existing acc:</Text>
+                    <Flex direction="row"
+                          justifyContent="center"
+                          textAlign="center"
                           p={4}
                           gap={6}>
-                        <Flex direction='column'
+                        <Flex direction="column"
                               p={2}
-                              cursor={"pointer"}
+                              cursor="pointer"
                               onClick={() => {
                                   setFormData({email: "johndoe@gmail.com", password: "JohnDoe"})
                               }}>
                             <Text>johndoe@gmail.com</Text>
                             <Text>JohnDoe</Text>
                         </Flex>
-                        <Center height='60px'>
-                            <Divider orientation='vertical'/>
+                        <Center height="60px">
+                            <Divider orientation="vertical"/>
                         </Center>
-                        <Flex direction='column'
+                        <Flex direction="column"
                               p={2}
-                              cursor={"pointer"}
+                              cursor="pointer"
                               onClick={() => {
                                   setFormData({email: "janedoe@gmail.com", password: "JaneDoe"})
                               }}>
@@ -144,7 +146,7 @@ export const LoginPage = () => {
         </form>
         <ChakraLink color="text"
                     as={ReactRouterLink}
-                    to='/register'>
+                    to="/register">
             Or create a new account.</ChakraLink>
     </FormLayout>
 };

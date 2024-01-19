@@ -69,6 +69,7 @@ export const RegisterPage = () => {
                    _focusVisible={{
                        outline: "none",
                    }}
+                   _placeholder={{color:"#F5F5F5"}}
                    bg="inputBg"
                    mb={4}
             />
@@ -83,6 +84,7 @@ export const RegisterPage = () => {
                    _focusVisible={{
                        outline: "none",
                    }}
+                   _placeholder={{color:"#F5F5F5"}}
                    bg="inputBg"
                    mb={4}
             />
@@ -99,6 +101,7 @@ export const RegisterPage = () => {
                            _focusVisible={{
                                outline: "none",
                            }}
+                           _placeholder={{color:"#F5F5F5"}}
                            bg="inputBg"
                            mb={4}
                     />

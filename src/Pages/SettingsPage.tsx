@@ -7,20 +7,18 @@ const SettingsPage = () => {
     const navigate = useNavigate()
     const {toggleColorMode} = useColorMode();
     return <FormLayout>
-           <Heading color="text">Settings</Heading>
-            <Switch id="dark_mode"
+        <Heading color="text">Settings</Heading>
+        <Switch id="dark_mode"
                 size="lg"
-                onChange={toggleColorMode}
-            />
-            <Button borderRadius={5}
-                    variant="solid"
-                    bg="#2b5278"
-                    _hover={{backgroundColor: "#3971a8"}}
-                    color="#F5F5F5"
-                    onClick={()=>navigate("/")}
-            >
-                Save settings</Button>
-            </FormLayout>
+                onChange={toggleColorMode}/>
+        <Button borderRadius={5}
+                variant="solid"
+                bg="#2b5278"
+                _hover={{backgroundColor: "#3971a8"}}
+                color="#F5F5F5"
+                onClick={() => navigate("/")}>
+            Save settings</Button>
+    </FormLayout>
 };
 
 export default SettingsPage;

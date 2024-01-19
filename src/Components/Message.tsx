@@ -35,7 +35,7 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
         <Text p={2}
               color="text"
               maxWidth="75%"
-              borderRadius='xl'
+              borderRadius="xl"
               bg={position === "left" ? "leftMsg" : "rightMsg"}>
             {message.msgText}</Text>
     </Flex>
