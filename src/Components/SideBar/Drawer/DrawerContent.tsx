@@ -6,8 +6,8 @@ import {
     Divider,
     Drawer,
     DrawerBody,
-    DrawerCloseButton,
-    DrawerContent,
+    DrawerCloseButton, DrawerContent,
+
     DrawerHeader,
     DrawerOverlay,
     Flex,
@@ -17,8 +17,8 @@ import {
 } from "@chakra-ui/react";
 import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
 import {signOut} from "firebase/auth";
-import {auth} from "../firebase";
-import {UserContext} from "../hooks/providers/UserContext";
+import {auth} from "../../../firebase";
+import {UserContext} from "../../../hooks/providers/UserContext";
 import {useNavigate} from "react-router-dom";
 
 type SideBarDrawerProps = {
@@ -26,7 +26,7 @@ type SideBarDrawerProps = {
     onClose: () => void
 }
 
-export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, onClose}
+export const ContentOfDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, onClose}
 ) => {
     const navigate = useNavigate()
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
@@ -43,6 +43,8 @@ export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, 
                    isOpen={isOpen}
                    placement="left"
                    onClose={onClose}>
+
+
         <DrawerOverlay/>
         <DrawerContent bg="secondaryBg"
                        borderRightWidth="1px"
@@ -54,6 +56,10 @@ export const SideBarDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen, 
                         src={user?.photoURL ?? undefined}/>
                 <Box ml="3">
                     <Text color="text"
+                          overflow="hidden"
+                          whiteSpace="nowrap"
+                          width="170px"
+                          textOverflow="ellipsis"
                           fontWeight="semibold"
                           fontSize="md">
                         <AtSignIcon/>

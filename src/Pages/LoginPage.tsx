@@ -66,7 +66,7 @@ export const LoginPage = () => {
         <Avatar/>
         <form onSubmit={handleFormSubmit}>
             <Input type="email"
-                   placeholder="Email"
+                   placeholder="Email..."
                    id="email"
                    name="email"
                    value={formData.email}
@@ -76,14 +76,14 @@ export const LoginPage = () => {
                    _focusVisible={{
                        outline: "none",
                    }}
-                   _placeholder={{color:"#F5F5F5"}}
+                   _placeholder={{color:"#5A6670"}}
                    color="text"
                    bg="inputBg"
             />
             <FormControl>
                 <InputGroup>
                     <Input type={showPassword ? "text" : "password"}
-                           placeholder="Password"
+                           placeholder="Password..."
                            id="password"
                            name="password"
                            value={formData.password}
@@ -93,7 +93,7 @@ export const LoginPage = () => {
                            _focusVisible={{
                                outline: "none",
                            }}
-                           _placeholder={{color:"#F5F5F5"}}
+                           _placeholder={{color:"#5A6670"}}
                            bg="inputBg"
                     />
                     <InputRightElement width="4.5rem"
@@ -138,13 +138,13 @@ export const LoginPage = () => {
             <Button borderRadius={5}
                     type="submit"
                     variant="solid"
-                    bg="#2b5278"
+                    bg="#658adf"
                     _hover={{backgroundColor: "#3971a8"}}
                     color="#F5F5F5"
                     width="full">
                 Login</Button>
         </form>
-        <ChakraLink color="text"
+        <ChakraLink color="secondaryText"
                     as={ReactRouterLink}
                     to="/register">
             Or create a new account.</ChakraLink>

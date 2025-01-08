@@ -1,35 +1,14 @@
-import React, {KeyboardEvent, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../hooks/providers/UserContext";
 import {db} from "../firebase";
-import {
-    collection,
-    doc,
-    getDoc,
-    getDocs,
-    onSnapshot,
-    query,
-    serverTimestamp,
-    setDoc,
-    updateDoc,
-    where
-} from 'firebase/firestore';
+import {doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc} from 'firebase/firestore';
 import {selectedUser, SelectedUserContext} from "../hooks/providers/SelectedUserContext";
-import {
-    Avatar,
-    Box,
-    Divider,
-    Flex,
-    Input,
-    InputGroup,
-    InputLeftElement,
-    Text,
-    useColorModeValue,
-    useDisclosure
-} from "@chakra-ui/react";
-import {HamburgerIcon, Search2Icon} from '@chakra-ui/icons';
-import {SideBarDrawer} from "./SideBarDrawer";
+import {Avatar, Box, Divider, Flex, Text, useColorModeValue, useDisclosure} from "@chakra-ui/react";
+import {SidebarDrawer} from "./SideBar/Drawer/Drawer";
+import {InputForUserSearch} from "./SideBar/InputForUserSearch";
 
-type foundUser = {
+
+export type foundUser = {
     displayName: string
     email: string
     uid: string
@@ -51,22 +30,10 @@ export const SideBar = () => {
 
     const {selectedChat, dispatch} = useContext(SelectedUserContext)
     const user = useContext(UserContext)
-    const [userForSearch, setUserForSearch] = useState("");
+
     const [foundUser, setFoundUser] = useState<foundUser | null>(null)
-    const searchForUser = async () => {
-        const q = query(collection(db, "users"), where("displayName", "==", userForSearch))
-        try {
-            const querySnapshot = await getDocs(q)
-            querySnapshot.forEach(doc =>
-                setFoundUser(doc.data() as foundUser)
-            )
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleUserSearch = (e: KeyboardEvent<HTMLInputElement>) => {
-        e.code === "Enter" && searchForUser()
-    }
+
+
     const selectFoundUser = async (userInfo: selectedUser) => {
         const combinedId = user!.uid > foundUser!.uid
             ? user!.uid + foundUser!.uid
@@ -119,11 +86,10 @@ export const SideBar = () => {
     }
 
     const {isOpen, onOpen, onClose} = useDisclosure()
-    const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
-    const selectedChatColor = useColorModeValue('#7eb2e0', '#2b5278')
 
-    const chatHoverColor = useColorModeValue('#adc2ee', '#202B36')
+    const selectedChatColor = useColorModeValue('#adc2ee', '#202B36')
 
+    const chatHoverColor = useColorModeValue('#7eb2e0', '#24394e')
 
     return <Box borderRightWidth="1px"
                 borderRightColor="borders"
@@ -135,40 +101,16 @@ export const SideBar = () => {
               gap={4}
               justifyContent="space-between"
               h="60px">
-            <HamburgerIcon boxSize={7}
-                           cursor="pointer"
-                           color="icons"
-                           _hover={{color: iconHoverColor}}
-                           onClick={onOpen}
-            />
-            <InputGroup size="sm">
-                <Input borderRadius="3xl"
-                       bg="inputBg"
-                       border="none"
-                       _focusVisible={{
-                           outline: "none",
-                       }}
-                       _placeholder={{color: "#F5F5F5"}}
-                       textColor="text"
-                       placeholder="Search for a user"
-                       value={userForSearch}
-                       onChange={e => setUserForSearch(e.currentTarget.value)}
-                       onKeyDown={handleUserSearch}
-                />
-                <InputLeftElement pointerEvents="none">
-                    <Search2Icon color="#5A6670"/>
-                </InputLeftElement>
-            </InputGroup>
+            <SidebarDrawer isOpen={isOpen} onClose={onClose} onOpen={onOpen}/>
+            <InputForUserSearch setFoundUser={setFoundUser}/>
         </Flex>
-        <SideBarDrawer isOpen={isOpen}
-                       onClose={onClose}/>
         <Box style={{scrollbarWidth: "thin"}}
              overflowY="auto"
              overflowX="hidden">
-            {foundUser && <Flex p={2}
-                                onClick={() => selectFoundUser(foundUser)}
-                                _hover={{backgroundColor: chatHoverColor}}
-                                cursor="pointer">
+            {foundUser && <><Flex p={2}
+                                  onClick={() => selectFoundUser(foundUser)}
+                                  _hover={{backgroundColor: chatHoverColor}}
+                                  cursor="pointer">
                 <Avatar src={foundUser.photoUrl ?? undefined}/>
                 <Box ml="3">
                     <Text color="text"
@@ -177,8 +119,8 @@ export const SideBar = () => {
                     </Text>
                 </Box>
             </Flex>
+                <Divider/></>
             }
-            {foundUser && <Divider/>}
             {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
                 <Flex px={2}
                       py={1}
@@ -190,6 +132,10 @@ export const SideBar = () => {
                     <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
                     <Box ml='3'>
                         <Text color="text"
+                              overflow="hidden"
+                              whiteSpace="nowrap"
+                              width="200px"
+                              textOverflow="ellipsis"
                               fontWeight="semibold">
                             {chat[1].userInfo.displayName}
                         </Text>

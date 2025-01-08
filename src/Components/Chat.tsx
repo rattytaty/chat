@@ -15,7 +15,6 @@ export const Chat: React.FC = React.memo(() => {
     const user = useContext(UserContext)
     const [msgText, setMsgText] = useState("")
     const [img, setImg] = useState<File | null>(null)
-
     const sendMsg = async () => {
         if (img) {
             const storageRef = ref(storage, v4())
@@ -58,7 +57,7 @@ export const Chat: React.FC = React.memo(() => {
 
     return <Box bg="primaryBg"
                 h="100vh">
-        {selectedChat.chatId && <Box overflow="auto">
+        {selectedChat.chatId && <Box >
             <ChatInfo/>
             <MessagesBlock/>
             <Box display="flex"

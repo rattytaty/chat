@@ -10,20 +10,24 @@ const theme = extendTheme({
                 default: '#040502',
                 _dark: '#F5F5F5',
             },
+            secondaryText:{
+                default: '#5A6670',
+                _dark: '#5A6670'
+            },
             primaryBg: {
-                default: 'radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(150,198,208,1) 100%)',
-                _dark: 'radial-gradient(circle, rgba(14,22,33,1) 0%, rgba(23,38,57,1) 100%)',
+                default: 'radial-gradient(circle, #F4FBFF, #EAF6FF, #DFF0FF, #F8FCFF)',
+                _dark: '#01030b',
             },
             secondaryBg: {
-                default: '#d1e2ee',
+                default: '#FFF9F6',
                 _dark: '#17212B',
             },
             leftMsg: {
-                default: '#6eafce',
+                default: '#84c6f3',
                 _dark: '#143a67',
             },
             rightMsg: {
-                default: '#5691dc',
+                default: '#b2bbfa',
                 _dark: '#2B5278',
             },
             icons: {
@@ -35,7 +39,7 @@ const theme = extendTheme({
                 _dark: '#0A121B',
             },
             inputBg: {
-                default: '#8b9aec',
+                default: '#ececf1',
                 _dark: '#242F3D',
             }
         },
