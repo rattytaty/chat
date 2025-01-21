@@ -1,15 +1,24 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile,} from "firebase/auth";
-import {auth, db} from "../firebase";
+import {auth, db} from "../lib/firebase";
 import {FirebaseError} from 'firebase/app';
 import {doc, setDoc} from "firebase/firestore";
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
-import {FormLayout} from "../Components/FormLayout";
-import {Button, FormControl, Heading, Input, InputGroup, InputRightElement, Link as ChakraLink} from "@chakra-ui/react";
+import {LoginRegisterFormLayout} from "../Components/Login&RegisterFormLayout";
+import {
+    Button,
+    FormControl,
+    FormErrorMessage,
+    Heading,
+    Input,
+    InputGroup,
+    InputRightElement,
+    Link as ChakraLink
+} from "@chakra-ui/react";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 
 type formData = {
-    nickname: string,
+    username: string,
     email: string,
     password: string
 }
@@ -17,7 +26,7 @@ type formData = {
 export const RegisterPage = () => {
     const navigate = useNavigate()
     const [formData, setFormData] = useState<formData>({
-        nickname: "",
+        username: "",
         email: "",
         password: ""
     });
@@ -25,22 +34,35 @@ export const RegisterPage = () => {
         const {name, value} = event.target;
         setFormData(prevFormData => ({...prevFormData, [name]: value}));
     };
+
+    const checkFormData =()=>{
+        const regEx:RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim
+        if(true){
+
+        }
+    }
+
+
     const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-        const {nickname, email, password} = formData
+        const {username, email, password} = formData
+
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password)
-            await updateProfile(response.user, {
-                displayName: nickname
-            })
+            /*await updateProfile(response.user, {
+                username
+            })*/
             await setDoc(doc(db, "users", response.user.uid), {
-                displayName: nickname,
+                avatar:null,
+                username,
                 email,
-                uid: response.user.uid,
-                photoUrl: null
+                id: response.user.uid,
+                blockedUsersList:[]
             });
-            await setDoc(doc(db, "usersChats", response.user.uid), {});
-            navigate("/")
+            await setDoc(doc(db, "chats", response.user.uid), {
+                chats:[]
+            });
+            //navigate("/")
         } catch (error) {
             if (error instanceof FirebaseError) {
                 console.log(error)
@@ -52,16 +74,16 @@ export const RegisterPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const handleShowClick = () => setShowPassword(!showPassword);
 
-    return <FormLayout>
+    return <LoginRegisterFormLayout>
         <Heading color="text">Register</Heading>
         <form onSubmit={handleFormSubmit}>
-           {/* <FormControl mb={4}>
+          {/* <FormControl mb={4}>
                 <FormErrorMessage>Have to be unique.</FormErrorMessage>
                 </FormControl>*/}
-            <Input placeholder="Nickname"
-                   id="nickname"
-                   name="nickname"
-                   value={formData.nickname}
+            <Input placeholder="Username"
+                   id="username"
+                   name="username"
+                   value={formData.username}
                    onChange={handleChange}
                    type="text"
                    color="text"
@@ -69,7 +91,7 @@ export const RegisterPage = () => {
                    _focusVisible={{
                        outline: "none"
                    }}
-                   _placeholder={{color:"#F5F5F5"}}
+                   _placeholder={{color:"#5A6670"}}
                    bg="inputBg"
                    mb={4}
             />
@@ -84,7 +106,7 @@ export const RegisterPage = () => {
                    _focusVisible={{
                        outline: "none"
                    }}
-                   _placeholder={{color:"#F5F5F5"}}
+                   _placeholder={{color:"#5A6670"}}
                    bg="inputBg"
                    mb={4}
             />
@@ -101,7 +123,7 @@ export const RegisterPage = () => {
                            _focusVisible={{
                                outline: "none"
                            }}
-                           _placeholder={{color:"#F5F5F5"}}
+                           _placeholder={{color:"#5A6670"}}
                            bg="inputBg"
                            mb={4}
                     />
@@ -123,9 +145,9 @@ export const RegisterPage = () => {
                     width="full">
                 Register</Button>
         </form>
-        <ChakraLink color="#text"
+        <ChakraLink color="secondaryText"
                     as={ReactRouterLink}
                     to="/login">
             Have an account already?</ChakraLink>
-    </FormLayout>
+    </LoginRegisterFormLayout>
 };

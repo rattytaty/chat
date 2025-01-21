@@ -1,12 +1,12 @@
 import React from 'react';
-import {FormLayout} from '../Components/FormLayout';
+import {LoginRegisterFormLayout} from '../Components/Login&RegisterFormLayout';
 import {Button, Heading, Switch, useColorMode} from "@chakra-ui/react";
 import {useNavigate} from "react-router-dom";
 
 const SettingsPage = () => {
     const navigate = useNavigate()
     const {toggleColorMode} = useColorMode();
-    return <FormLayout>
+    return <LoginRegisterFormLayout>
         <Heading color="text">Settings</Heading>
         <Switch id="dark_mode"
                 size="lg"
@@ -18,7 +18,7 @@ const SettingsPage = () => {
                 color="#F5F5F5"
                 onClick={() => navigate("/")}>
             Save settings</Button>
-    </FormLayout>
+    </LoginRegisterFormLayout>
 };
 
 export default SettingsPage;

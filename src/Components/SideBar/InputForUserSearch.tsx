@@ -2,8 +2,9 @@ import React, {KeyboardEvent, useState} from 'react';
 import {Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
 import {Search2Icon} from "@chakra-ui/icons";
 import {collection, getDocs, query, where} from "firebase/firestore";
-import {db} from "../../firebase";
+
 import {foundUser} from "../SideBar";
+import {db} from "../../lib/firebase";
 
 export const InputForUserSearch = ({setFoundUser}:{setFoundUser:(foundUser:foundUser)=>void}) => {
 

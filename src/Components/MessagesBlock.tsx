@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {doc, onSnapshot} from "firebase/firestore";
-import {db} from "../firebase";
+
 import {UserContext} from "../hooks/providers/UserContext";
 import {Message} from "./Message";
 import {Box} from "@chakra-ui/react";
+import {db} from "../lib/firebase";
 
 export type message = {
     date: {
