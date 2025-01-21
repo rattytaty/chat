@@ -4,10 +4,24 @@ import {Grid, GridItem, useMediaQuery} from "@chakra-ui/react";
 import {SideBar} from "../Components/SideBar";
 import {UserContext} from "../hooks/providers/UserContext";
 import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
+import {onAuthStateChanged} from "firebase/auth";
+import {auth} from "../lib/firebase";
+import {useUserStore} from "../hooks/providers/useUserStore";
 
 export const Layout = () => {
 
-    const user = useContext(UserContext)
+    const {user, isLoading, fetchUserInfo} = useUserStore()
+
+    useEffect(() => {
+        const unsub = onAuthStateChanged(auth, user => {
+            }
+        )
+        return ()=>{
+            unsub()
+        }
+    }, []);
+
+    //const user = useContext(UserContext)
     const navigate = useNavigate()
     useEffect(() => {
         if (!user) {

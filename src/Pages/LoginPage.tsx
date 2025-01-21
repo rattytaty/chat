@@ -2,7 +2,7 @@ import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 're
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
 import {UserContext} from "../hooks/providers/UserContext";
 import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from "../firebase";
+import {auth} from "../lib/firebase";
 import {FirebaseError} from "firebase/app";
 import {
     Avatar,
@@ -20,7 +20,7 @@ import {
     Text
 } from '@chakra-ui/react';
 import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons';
-import {FormLayout} from "../Components/FormLayout";
+import {LoginRegisterFormLayout} from "../Components/Login&RegisterFormLayout";
 
 type formData = {
     email: string,
@@ -52,7 +52,10 @@ export const LoginPage = () => {
             await signInWithEmailAndPassword(auth, email, password)
         } catch (error) {
             if (error instanceof FirebaseError) {
-                console.log(error)
+
+
+                console.log("error is")
+                console.log(error.message)
                 //const {code, message} = error
             }
         }
@@ -61,7 +64,7 @@ export const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const handleShowClick = () => setShowPassword(!showPassword);
 
-    return <FormLayout>
+    return <LoginRegisterFormLayout>
         <Heading color="text">Login</Heading>
         <Avatar/>
         <form onSubmit={handleFormSubmit}>
@@ -148,5 +151,5 @@ export const LoginPage = () => {
                     as={ReactRouterLink}
                     to="/register">
             Or create a new account.</ChakraLink>
-    </FormLayout>
+    </LoginRegisterFormLayout>
 };

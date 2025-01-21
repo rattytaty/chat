@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "../hooks/providers/UserContext";
-import {db} from "../firebase";
+import {db} from "../lib/firebase";
 import {doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc} from 'firebase/firestore';
 import {selectedUser, SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {Avatar, Box, Divider, Flex, Text, useColorModeValue, useDisclosure} from "@chakra-ui/react";

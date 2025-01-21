@@ -4,7 +4,7 @@ import {Flex, Stack} from "@chakra-ui/react";
 type FormLayoutProps = {
     children: React.ReactNode
 }
-export const FormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => {
+export const LoginRegisterFormLayout: React.FC<FormLayoutProps> = React.memo(({children}) => {
 
         return <Flex flexDirection="column"
                      width="100wh"

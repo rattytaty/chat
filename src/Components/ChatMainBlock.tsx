@@ -4,13 +4,13 @@ import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeVal
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
 import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {db, storage} from "../firebase";
+import {db, storage} from "../lib/firebase";
 import {v4} from "uuid";
 import {arrayUnion, doc, Timestamp, updateDoc} from "firebase/firestore";
 import {UserContext} from "../hooks/providers/UserContext";
-import {ChatInfo} from "./ChatInfo";
+import {SelectedChatInfo} from "./SelectedChatInfo";
 
-export const Chat: React.FC = React.memo(() => {
+export const ChatMainBlock: React.FC = React.memo(() => {
     const {selectedChat} = useContext(SelectedUserContext)
     const user = useContext(UserContext)
     const [msgText, setMsgText] = useState("")
@@ -58,7 +58,7 @@ export const Chat: React.FC = React.memo(() => {
     return <Box bg="primaryBg"
                 h="100vh">
         {selectedChat.chatId && <Box >
-            <ChatInfo/>
+            <SelectedChatInfo/>
             <MessagesBlock/>
             <Box display="flex"
                  alignItems="center"

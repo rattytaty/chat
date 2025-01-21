@@ -3,7 +3,7 @@ import {Avatar, Flex, Text, useColorModeValue, useMediaQuery} from "@chakra-ui/r
 import {selectedUser, SelectedUserContext} from "../hooks/providers/SelectedUserContext";
 import {ArrowBackIcon} from "@chakra-ui/icons";
 
-export const ChatInfo: React.FC = React.memo(() => {
+export const SelectedChatInfo: React.FC = React.memo(() => {
     const {selectedChat, dispatch} = useContext(SelectedUserContext)
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')

@@ -1,9 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
-import {LoginPage} from "./Pages/LoginPage";
-import {RegisterPage} from "./Pages/RegisterPage";
-import {Layout} from "./Pages/Layout";
-import SettingsPage from "./Pages/SettingsPage";
-import {Chat} from "./Components/Chat";
+import {LoginPage} from "../Pages/LoginPage";
+import {RegisterPage} from "../Pages/RegisterPage";
+import {Layout} from "../Pages/Layout";
+import SettingsPage from "../Pages/SettingsPage";
+import {ChatMainBlock} from "../Components/ChatMainBlock";
 import React from "react";
 
 export const router = createBrowserRouter([
@@ -14,7 +14,7 @@ export const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Chat/>
+                element: <ChatMainBlock/>
             }
         ]
     },

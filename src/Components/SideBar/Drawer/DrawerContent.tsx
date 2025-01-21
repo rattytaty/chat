@@ -17,7 +17,7 @@ import {
 } from "@chakra-ui/react";
 import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
 import {signOut} from "firebase/auth";
-import {auth} from "../../../firebase";
+import {auth} from "../../../lib/firebase";
 import {UserContext} from "../../../hooks/providers/UserContext";
 import {useNavigate} from "react-router-dom";
 
