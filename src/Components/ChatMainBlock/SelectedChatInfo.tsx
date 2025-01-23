@@ -1,15 +1,13 @@
-import React, {useContext} from 'react';
-import {Avatar, Flex, Text, useColorModeValue, useMediaQuery} from "@chakra-ui/react";
-import {selectedUser, SelectedUserContext} from "../hooks/providers/SelectedUserContext";
-import {ArrowBackIcon} from "@chakra-ui/icons";
+import React from 'react';
+import {useColorModeValue, useMediaQuery} from "@chakra-ui/react";
 
 export const SelectedChatInfo: React.FC = React.memo(() => {
-    const {selectedChat, dispatch} = useContext(SelectedUserContext)
+
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
 
     return <>
-        {selectedChat.chatId && <Flex bg="secondaryBg"
+        {/*{selectedChat.chatId && <Flex bg="secondaryBg"
                                       borderBottomWidth="1px"
                                       borderBottomColor="borders"
                                       height="60px"
@@ -31,6 +29,6 @@ export const SelectedChatInfo: React.FC = React.memo(() => {
                   fontWeight="semibold">
                 {selectedChat.chatUser.displayName}
             </Text>
-        </Flex>}
+        </Flex>}*/}
     </>
 })

@@ -1,8 +1,8 @@
-import React, {ChangeEvent, FormEvent, useContext, useEffect, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
-import {UserContext} from "../hooks/providers/UserContext";
+
 import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from "../lib/firebase";
+import {auth} from "../../lib/firebase";
 import {FirebaseError} from "firebase/app";
 import {
     Avatar,
@@ -20,7 +20,7 @@ import {
     Text
 } from '@chakra-ui/react';
 import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons';
-import {LoginRegisterFormLayout} from "../Components/Login&RegisterFormLayout";
+import {LoginRegisterFormLayout} from "./Login&RegisterFormLayout";
 
 type formData = {
     email: string,
@@ -28,14 +28,10 @@ type formData = {
 }
 export const LoginPage = () => {
 
-    const user = useContext(UserContext)
+
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (user) {
-            navigate("/")
-        }
-    }, [user, navigate]);
+
     const [formData, setFormData] = useState<formData>({
         email: "",
         password: ""
@@ -49,13 +45,9 @@ export const LoginPage = () => {
         e.preventDefault()
         const {email, password} = formData
         try {
-            await signInWithEmailAndPassword(auth, email, password)
+            await signInWithEmailAndPassword(auth, email, password).then(()=>navigate("/"))
         } catch (error) {
             if (error instanceof FirebaseError) {
-
-
-                console.log("error is")
-                console.log(error.message)
                 //const {code, message} = error
             }
         }

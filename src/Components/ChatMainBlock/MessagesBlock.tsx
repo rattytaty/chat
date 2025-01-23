@@ -1,11 +1,7 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
-import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
-import {doc, onSnapshot} from "firebase/firestore";
-
-import {UserContext} from "../hooks/providers/UserContext";
+import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message";
 import {Box} from "@chakra-ui/react";
-import {db} from "../lib/firebase";
+import {useUserStore} from "../../hooks/useUserStore";
 
 export type message = {
     date: {
@@ -19,15 +15,10 @@ export type message = {
 
 export const MessagesBlock = () => {
 
-    const {selectedChat} = useContext(SelectedUserContext)
+
     const [messages, setMessages] = useState<message[]>([])
-    const user = useContext(UserContext)
-    useEffect(() => {
-        const unSub = onSnapshot(doc(db, "chats", selectedChat.chatId as string), (doc) => {
-            doc.exists() && setMessages(doc.data().messages as message[])
-        })
-        return () => unSub()
-    }, [selectedChat.chatId]);
+    const {user} = useUserStore()
+
     const reference = useRef<HTMLDivElement>(null);
     useEffect(() => {
         reference.current && reference.current.scrollIntoView({behavior: "smooth"});
@@ -40,7 +31,7 @@ export const MessagesBlock = () => {
                 overflowY="auto">
         {messages.map(message =>
             <Message key={message.id}
-                     position={message.senderId === user!.uid ? "right" : "left"}
+                     position={message.senderId === user!.id ? "right" : "left"}
                      message={message}
             />)}
         <div ref={reference}></div>

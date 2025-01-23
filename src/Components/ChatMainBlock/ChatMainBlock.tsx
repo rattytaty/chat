@@ -1,63 +1,21 @@
-import React, {useContext, useState} from 'react';
-import {SelectedUserContext} from "../hooks/providers/SelectedUserContext";
+import React, {useState} from 'react';
 import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue} from "@chakra-ui/react";
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
-import {getDownloadURL, ref, uploadBytesResumable} from "firebase/storage";
-import {db, storage} from "../lib/firebase";
-import {v4} from "uuid";
-import {arrayUnion, doc, Timestamp, updateDoc} from "firebase/firestore";
-import {UserContext} from "../hooks/providers/UserContext";
+
 import {SelectedChatInfo} from "./SelectedChatInfo";
 
 export const ChatMainBlock: React.FC = React.memo(() => {
-    const {selectedChat} = useContext(SelectedUserContext)
-    const user = useContext(UserContext)
+
+
     const [msgText, setMsgText] = useState("")
     const [img, setImg] = useState<File | null>(null)
-    const sendMsg = async () => {
-        if (img) {
-            const storageRef = ref(storage, v4())
-            const uploadImg = uploadBytesResumable(storageRef, img)
-            uploadImg.on("state_changed", () => {
-                getDownloadURL(uploadImg.snapshot.ref).then(async (downloadURL) => {
-                    await updateDoc(doc(db, "chats", selectedChat.chatId as string), {
-                        messages: arrayUnion({
-                            id: v4(),
-                            msgText,
-                            senderId: user!.uid,
-                            date: Timestamp.now(),
-                            img: downloadURL
-                        })
-                    })
-                })
-            })
-        } else {
-            await updateDoc(doc(db, "chats", selectedChat.chatId as string), {
-                messages: arrayUnion({
-                    id: v4(),
-                    msgText,
-                    senderId: user!.uid,
-                    date: Timestamp.now()
-                })
-            })
-        }
-        await Promise.allSettled([await updateDoc(doc(db, "usersChats", user!.uid), {
-            [selectedChat.chatId + ".lastMessage"]: {msgText},
-            [selectedChat.chatId + ".date"]: Timestamp.now()
-        }),
-            await updateDoc(doc(db, "usersChats", selectedChat.chatUser.uid), {
-                [selectedChat.chatId + ".lastMessage"]: {msgText},
-                [selectedChat.chatId + ".date"]: Timestamp.now()
-            })])
-        setImg(null)
-        setMsgText("")
-    }
+
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
 
     return <Box bg="primaryBg"
                 h="100vh">
-        {selectedChat.chatId && <Box >
+        {/*{selectedChat.chatId && <Box >
             <SelectedChatInfo/>
             <MessagesBlock/>
             <Box display="flex"
@@ -92,8 +50,9 @@ export const ChatMainBlock: React.FC = React.memo(() => {
                            placeholder="Write a message..."
                            value={msgText}
                            onChange={event => setMsgText(event.currentTarget.value)}
-                           onKeyDown={event => event.code === "Enter" && sendMsg()}/>
-                    <InputRightAddon onClick={sendMsg}
+                           //onKeyDown={event => event.code === "Enter" && sendMsg()}\
+                    />
+                    <InputRightAddon //onClick={sendMsg}
                                      _hover={{color: iconHoverColor}}
                                      border="none"
                                      bg="none"
@@ -102,6 +61,6 @@ export const ChatMainBlock: React.FC = React.memo(() => {
                                      children={<ArrowForwardIcon boxSize={6}/>}/>
                 </InputGroup>
             </Box>
-        </Box>}
+        </Box>}*/}
     </Box>
 })

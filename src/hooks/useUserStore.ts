@@ -1,6 +1,6 @@
 import {create} from "zustand/react";
 import {doc, getDoc} from "firebase/firestore";
-import {db} from "../../lib/firebase";
+import {db} from "../lib/firebase";
 
 type user = {
     avatar: string | null,
@@ -21,6 +21,7 @@ export const useUserStore = create<userStore>()((setState, getState, store) => (
     user: null,
     isLoading: true,
     fetchUserInfo: async (uId: any) => {
+
         if (!uId) {
             return setState({
                 user: null,
@@ -52,3 +53,4 @@ export const useUserStore = create<userStore>()((setState, getState, store) => (
 
     },
 }))
+

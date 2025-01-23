@@ -1,7 +1,7 @@
 import React from 'react';
 
 import DrawerToggleButton from "./DrawerToggleButton";
-import {ContentOfDrawer} from "./DrawerContent";
+import {ContentOfDrawer} from "./ContentOfDrawer";
 
 type SidebarDrawerProps = {
     onOpen: () => void

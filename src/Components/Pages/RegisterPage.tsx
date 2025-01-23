@@ -1,10 +1,10 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile,} from "firebase/auth";
-import {auth, db} from "../lib/firebase";
+import {auth, db} from "../../lib/firebase";
 import {FirebaseError} from 'firebase/app';
 import {doc, setDoc} from "firebase/firestore";
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
-import {LoginRegisterFormLayout} from "../Components/Login&RegisterFormLayout";
+import {LoginRegisterFormLayout} from "./Login&RegisterFormLayout";
 import {
     Button,
     FormControl,

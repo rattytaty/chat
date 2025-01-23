@@ -6,8 +6,8 @@ import {
     Divider,
     Drawer,
     DrawerBody,
-    DrawerCloseButton, DrawerContent,
-
+    DrawerCloseButton,
+    DrawerContent,
     DrawerHeader,
     DrawerOverlay,
     Flex,
@@ -16,10 +16,9 @@ import {
     useMediaQuery
 } from "@chakra-ui/react";
 import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
-import {signOut} from "firebase/auth";
 import {auth} from "../../../lib/firebase";
-import {UserContext} from "../../../hooks/providers/UserContext";
 import {useNavigate} from "react-router-dom";
+import {useUserStore} from "../../../hooks/useUserStore";
 
 type SideBarDrawerProps = {
     isOpen: boolean
@@ -31,11 +30,10 @@ export const ContentOfDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen
     const navigate = useNavigate()
     const [isLargerThan600] = useMediaQuery('(min-width: 600px)')
     const logOutHandler = () => {
-        signOut(auth).then(() =>
-            navigate("/login")
-        )
+        auth.signOut()
     }
-    const user = useContext(UserContext)
+
+    const {user} = useUserStore()
 
     const navigationHoverColor = useColorModeValue('#adc2ee', '#202B36')
 
@@ -53,7 +51,7 @@ export const ContentOfDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen
             <DrawerHeader display="flex"
                           alignItems="center">
                 <Avatar mr={4}
-                        src={user?.photoURL ?? undefined}/>
+                        src={user?.avatar ?? undefined}/>
                 <Box ml="3">
                     <Text color="text"
                           overflow="hidden"
@@ -63,7 +61,7 @@ export const ContentOfDrawer: React.FC<SideBarDrawerProps> = React.memo(({isOpen
                           fontWeight="semibold"
                           fontSize="md">
                         <AtSignIcon/>
-                        {user?.displayName}
+                        {user?.username}
                     </Text>
                     <Button borderRadius={5}
                             variant="solid"

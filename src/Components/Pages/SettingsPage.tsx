@@ -1,5 +1,5 @@
 import React from 'react';
-import {LoginRegisterFormLayout} from '../Components/Login&RegisterFormLayout';
+import {LoginRegisterFormLayout} from './Login&RegisterFormLayout';
 import {Button, Heading, Switch, useColorMode} from "@chakra-ui/react";
 import {useNavigate} from "react-router-dom";
 
