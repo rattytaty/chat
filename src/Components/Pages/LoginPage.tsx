@@ -27,11 +27,7 @@ type formData = {
     password: string
 }
 export const LoginPage = () => {
-
-
     const navigate = useNavigate()
-
-
     const [formData, setFormData] = useState<formData>({
         email: "",
         password: ""

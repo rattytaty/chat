@@ -5,7 +5,7 @@ import {SidebarDrawer} from "./Drawer/Drawer";
 import {InputForUserSearch} from "./InputForUserSearch";
 import {doc, onSnapshot} from 'firebase/firestore';
 import {db} from "../../lib/firebase";
-import {useUserStore} from "../../hooks/useUserStore";
+import {user, useUserStore} from "../../hooks/useUserStore";
 
 
 export type foundUser = {
@@ -31,6 +31,8 @@ interface chat {
     }
 }
 
+type dialog = {}
+
 
 type state = {
     chatId: string | null
@@ -44,7 +46,7 @@ export const SideBar = () => {
     }
 
 
-    const [foundUser, setFoundUser] = useState<foundUser | null>(null)
+    const [foundUsers, setFoundUsers] = useState<user[]>([])
 
 
     const {isOpen, onOpen, onClose} = useDisclosure()
@@ -53,15 +55,21 @@ export const SideBar = () => {
 
     const chatHoverColor = useColorModeValue('#7eb2e0', '#24394e')
     const {user} = useUserStore()
-    console.log(user)
 
-/*    useEffect(() => {
-        const unsub = onSnapshot(doc(db, "chats", user!.id), (doc) => {
-        setChats(doc.data)
+
+    const [dialogs, setDialogs] = useState<any>([])
+    useEffect(() => {
+        const unsub = user && onSnapshot(doc(db, "chats", user.id), (response) => {
+            //const сhatsList = response.data().dialogs
+            //const promises = chatsList.map()
         })
-        return () => unsub()
-    }, [user]);*/
-    const [chats, setChats] = useState<chat>()
+        return () => {
+            if (unsub) unsub()
+        }
+    }, [user]);
+
+
+
 
     return <Box borderRightWidth="1px"
                 borderRightColor="borders"
@@ -71,43 +79,57 @@ export const SideBar = () => {
               py={2}
               alignItems="center"
               gap={4}
-              justifyContent="space-between"
               h="60px">
             <SidebarDrawer isOpen={isOpen}
                            onClose={onClose}
                            onOpen={onOpen}/>
-            <InputForUserSearch setFoundUser={setFoundUser}/>
+            <InputForUserSearch setFoundUsers={setFoundUsers}/>
         </Flex>
         <Box style={{scrollbarWidth: "thin"}}
              overflowY="auto"
              overflowX="hidden">
-            {foundUser && <><Flex p={2}
+
+            {foundUsers.map(foundUser=><Flex p={2}
+                                             key={foundUser.id}
+                                        onClick={() => {
+                                        }}
+                                        _hover={{backgroundColor: chatHoverColor}}
+                                        cursor="pointer">
+                <Avatar src={foundUser.avatar ?? undefined}/>
+                <Box ml="3">
+                    <Text color="text"
+                          fontWeight="semibold">
+                        {foundUser.username}
+                    </Text>
+                </Box>
+            </Flex>)}
+
+            {/*{foundUsers && <><Flex p={2}
                                   onClick={() => {
                                   }}
                                   _hover={{backgroundColor: chatHoverColor}}
                                   cursor="pointer">
-                <Avatar src={foundUser.photoUrl ?? undefined}/>
+                <Avatar src={foundUsers.photoUrl ?? undefined}/>
                 <Box ml="3">
                     <Text color="text"
                           fontWeight="semibold">
-                        {foundUser.displayName}
+                        {foundUsers.displayName}
                     </Text>
                 </Box>
             </Flex>
                 <Divider/></>
-            }
-
-
-            {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =>
+            }*/}
+            {foundUsers.length?<Divider/>:undefined}
+            {/*{dialogs.map(dialog =>
                 <Flex px={2}
                       py={1}
-                      bg={selectedChat.chatUser.uid === chat[1].userInfo.uid ? selectedChatColor : undefined}
+                      bg={selectedChat.chatUser.uid === dialog[1].userInfo.uid ? selectedChatColor : undefined}
                       onClick={() => {
                       }}
-                      key={chat[0]}
+                      key={dialog[0]}
                       _hover={{backgroundColor: chatHoverColor}}
                       cursor="pointer">
-                    <Avatar src={chat[1].userInfo.photoUrl ?? undefined}/>
+                    <Avatar src={dialog[1].userInfo.photoUrl ?? undefined}/>
                     <Box ml='3'>
                         <Text color="text"
                               overflow="hidden"
@@ -115,18 +137,22 @@ export const SideBar = () => {
                               width="200px"
                               textOverflow="ellipsis"
                               fontWeight="semibold">
-                            {chat[1].userInfo.displayName}
+                            {dialog[1].userInfo.displayName}
                         </Text>
-                        {chat[1].lastMessage && <Text
+                        {dialog[1].lastMessage && <Text
                             overflow="hidden"
                             whiteSpace="nowrap"
                             width="200px"
                             textOverflow="ellipsis"
                             fontSize="sm"
-                            color={selectedChat.chatUser.uid === chat[1].userInfo.uid ? "text" : "#5A6670"}>{chat[1].lastMessage.msgText}</Text>}
+                            color={selectedChat.chatUser.uid === dialog[1].userInfo.uid ? "text" : "#5A6670"}>{dialog[1].lastMessage.msgText}</Text>}
                     </Box>
                 </Flex>
-            )}
+            )}*/}
+
+
+            {/* {chats && Object.entries(chats)?.sort((a, b) => (b[1].date ? b[1].date.second : 0) - (a[1].date ? a[1].date.second : 0)).map(chat =><></>
+            )}*/}
         </Box>
     </Box>
 };

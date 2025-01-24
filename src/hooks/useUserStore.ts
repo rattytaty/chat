@@ -2,7 +2,7 @@ import {create} from "zustand/react";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../lib/firebase";
 
-type user = {
+export type user = {
     avatar: string | null,
     username: string,
     email: string,

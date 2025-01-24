@@ -1,32 +1,50 @@
 import React, {KeyboardEvent, useState} from 'react';
-import {Input, InputGroup, InputLeftElement} from "@chakra-ui/react";
-import {Search2Icon} from "@chakra-ui/icons";
-import {collection, getDocs, query, where} from "firebase/firestore";
-
-import {foundUser} from "./SideBar";
+import {Input, InputGroup, useColorModeValue} from "@chakra-ui/react";
+import {CloseIcon, Search2Icon} from "@chakra-ui/icons";
+import {collection, getDocs, query, where} from 'firebase/firestore';
 import {db} from "../../lib/firebase";
+import {user} from "../../hooks/useUserStore";
 
-export const InputForUserSearch = ({setFoundUser}:{setFoundUser:(foundUser:foundUser)=>void}) => {
+type InputForUserSearchProps = {
+    setFoundUsers: (foundUser: user[]) => void
+}
+
+export const InputForUserSearch = ({setFoundUsers}: InputForUserSearchProps) => {
 
     const [userForSearch, setUserForSearch] = useState("");
-
-    const handleUserSearch = (e: KeyboardEvent<HTMLInputElement>) => {
+    const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
+    const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
         e.code === "Enter" && searchForUser()
     }
 
     const searchForUser = async () => {
-        const q = query(collection(db, "users"), where("displayName", "==", userForSearch))
+        if (!userForSearch) return
         try {
+            const userRef = collection(db, "users")
+            const q = query(userRef, where("username", ">=", userForSearch), where('username', '<=', userForSearch + '~'))
             const querySnapshot = await getDocs(q)
-            querySnapshot.forEach(doc =>
-                setFoundUser(doc.data() as foundUser)
-            )
+            if (!querySnapshot.empty) {
+                const arrOfFoundUsers: user[] = []
+                querySnapshot.docs.map(el => {
+                    arrOfFoundUsers.push(el.data() as user)
+
+                })
+                setFoundUsers(arrOfFoundUsers)
+            }
         } catch (error) {
-            console.log(error)
+
+
         }
     }
 
-    return <InputGroup size="sm">
+    const cancelSearch =() => {
+        setUserForSearch("")
+        setFoundUsers([])
+    }
+
+    return <InputGroup size="sm"
+                       gap={1}
+                       alignItems="center">
         <Input borderRadius="3xl"
                bg="inputBg"
                border="none"
@@ -35,13 +53,24 @@ export const InputForUserSearch = ({setFoundUser}:{setFoundUser:(foundUser:found
                }}
                _placeholder={{color: "#5A6670"}}
                textColor="text"
-               placeholder="Search for a user"
+               placeholder="Search for a user..."
                value={userForSearch}
                onChange={e => setUserForSearch(e.currentTarget.value)}
-               onKeyDown={handleUserSearch}
+               onKeyDown={handleKeyDown}
         />
-        <InputLeftElement pointerEvents="none">
-            <Search2Icon color="#5A6670"/>
-        </InputLeftElement>
+
+        {userForSearch && <>
+            <Search2Icon boxSize={5}
+                         cursor="pointer"
+                         color="icons"
+                         _hover={{color: iconHoverColor}}
+                         onClick={() => searchForUser()}/>
+            <CloseIcon boxSize={5}
+                       cursor="pointer"
+                       color="icons"
+                       _hover={{color: iconHoverColor}}
+                       onClick={cancelSearch}
+            />
+        </>}
     </InputGroup>
 };

@@ -6,10 +6,9 @@ import {SideBar} from "../SideBar/SideBar";
 import {useUserObserver} from "../../hooks/useUserObserver";
 
 export const Layout = () => {
-
     useUserObserver()
     const [isLargerThan600] = useMediaQuery("(min-width: 600px)")
-    const selectedChat = {chatId:"12313"}
+    const selectedChat = {chatId: "12313"}
 
     return <Grid h="100vh"
                  w="100vw"
