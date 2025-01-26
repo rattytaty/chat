@@ -5,7 +5,6 @@ import {useUserStore} from "./useUserStore";
 import {useNavigate} from "react-router-dom";
 
 export const useUserObserver = () => {
-
     const {fetchUserInfo} = useUserStore()
     const navigate = useNavigate()
     useEffect(() => {

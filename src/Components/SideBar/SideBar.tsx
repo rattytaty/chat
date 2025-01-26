@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Avatar, Box, Divider, Flex, Text, useColorModeValue, useDisclosure} from "@chakra-ui/react";
 import {SidebarDrawer} from "./Drawer/Drawer";
 import {InputForUserSearch} from "./InputForUserSearch";
-import {doc, onSnapshot} from 'firebase/firestore';
+import {arrayUnion, collection, doc, onSnapshot, serverTimestamp, setDoc, updateDoc} from 'firebase/firestore';
 import {db} from "../../lib/firebase";
 import {user, useUserStore} from "../../hooks/useUserStore";
 
@@ -59,7 +59,7 @@ export const SideBar = () => {
 
     const [dialogs, setDialogs] = useState<any>([])
     useEffect(() => {
-        const unsub = user && onSnapshot(doc(db, "chats", user.id), (response) => {
+        const unsub = user && onSnapshot(doc(db, "dialogs", user.id), (response) => {
             //const сhatsList = response.data().dialogs
             //const promises = chatsList.map()
         })
@@ -68,7 +68,41 @@ export const SideBar = () => {
         }
     }, [user]);
 
+    const startDialog = async (foundUserId:string) => {
+        const dialogRef = collection(db, "dialogs")
+        const userDialogsRef = collection(db, "userDialogs")
 
+
+
+
+        try {
+
+            const newDialogRef = doc(dialogRef)
+            await setDoc(newDialogRef, {
+                createdAt: serverTimestamp(),
+                messages:[]
+            })
+            await  updateDoc(doc(userDialogsRef, foundUserId),{
+                dialogs:arrayUnion({
+                    chatId: newDialogRef.id,
+                    lastMessage:"",
+                    receiverId:user!.id,
+                    updatedAt:Date.now()
+                })
+            })
+            await  updateDoc(doc(userDialogsRef, user!.id),{
+                dialogs:arrayUnion({
+                    chatId: newDialogRef.id,
+                    lastMessage:"",
+                    receiverId:foundUserId,
+                    updatedAt:Date.now()
+                })
+            })
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
     return <Box borderRightWidth="1px"
@@ -89,12 +123,11 @@ export const SideBar = () => {
              overflowY="auto"
              overflowX="hidden">
 
-            {foundUsers.map(foundUser=><Flex p={2}
-                                             key={foundUser.id}
-                                        onClick={() => {
-                                        }}
-                                        _hover={{backgroundColor: chatHoverColor}}
-                                        cursor="pointer">
+            {foundUsers.map(foundUser => <Flex p={2}
+                                               key={foundUser.id}
+                                               onClick={()=>startDialog(foundUser.id)}
+                                               _hover={{backgroundColor: chatHoverColor}}
+                                               cursor="pointer">
                 <Avatar src={foundUser.avatar ?? undefined}/>
                 <Box ml="3">
                     <Text color="text"
@@ -119,7 +152,7 @@ export const SideBar = () => {
             </Flex>
                 <Divider/></>
             }*/}
-            {foundUsers.length?<Divider/>:undefined}
+            {foundUsers.length ? <Divider/> : undefined}
             {/*{dialogs.map(dialog =>
                 <Flex px={2}
                       py={1}

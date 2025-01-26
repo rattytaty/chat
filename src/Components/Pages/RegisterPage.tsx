@@ -59,7 +59,7 @@ export const RegisterPage = () => {
                 id: response.user.uid,
                 blockedUsersList:[]
             });
-            await setDoc(doc(db, "dialogs", response.user.uid), {
+            await setDoc(doc(db, "userDialogs", response.user.uid), {
                 dialogs:[]
             });
             //navigate("/")

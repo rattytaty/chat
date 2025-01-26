@@ -1,6 +1,6 @@
 import React from 'react';
 import {HamburgerIcon} from "@chakra-ui/icons";
-import {useColorModeValue} from "@chakra-ui/react";
+import {Button, useColorModeValue} from "@chakra-ui/react";
 
 const DrawerToggleButton = ({onOpen}:{onOpen:() => void}) => {
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
@@ -9,8 +9,8 @@ const DrawerToggleButton = ({onOpen}:{onOpen:() => void}) => {
                           cursor="pointer"
                           color="icons"
                           _hover={{color: iconHoverColor}}
-                          onClick={onOpen}
-    />
+                          onClick={onOpen} />
+
 };
 
 export default DrawerToggleButton;
