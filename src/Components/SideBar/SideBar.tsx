@@ -3,107 +3,80 @@ import React, {useEffect, useState} from 'react';
 import {Avatar, Box, Divider, Flex, Text, useColorModeValue, useDisclosure} from "@chakra-ui/react";
 import {SidebarDrawer} from "./Drawer/Drawer";
 import {InputForUserSearch} from "./InputForUserSearch";
-import {arrayUnion, collection, doc, onSnapshot, serverTimestamp, setDoc, updateDoc} from 'firebase/firestore';
+import {arrayUnion, collection, doc, getDoc, onSnapshot, serverTimestamp, setDoc, updateDoc} from 'firebase/firestore';
 import {db} from "../../lib/firebase";
 import {user, useUserStore} from "../../hooks/useUserStore";
+import {DialogPreviewPlate} from "./DialogPreviewPlate";
 
-
-export type foundUser = {
-    displayName: string
-    email: string
-    uid: string
-    photoUrl: string
-}
-export type selectedUser = {
-    uid: string
-    photoUrl: string | null
-    displayName: string
+export type previewInfo = {
+    chatId: string
+    lastMessage: string
+    receiverId: string
+    updatedAt: number
 }
 
-interface chat {
-    [key: string]: {
-        date: {
-            second: number
-            nanoseconds: number
-        }
-        userInfo: selectedUser
-        lastMessage: { msgText: string }
-    }
-}
-
-type dialog = {}
-
-
-type state = {
-    chatId: string | null
-    chatUser: selectedUser
+export type dialogsPreview = {
+    previewInfo: previewInfo
+    dialogUser: user
 }
 
 export const SideBar = () => {
-    const selectedChat: state = {
-        chatId: null,
-        chatUser: {} as selectedUser
-    }
-
 
     const [foundUsers, setFoundUsers] = useState<user[]>([])
-
-
     const {isOpen, onOpen, onClose} = useDisclosure()
-
     const selectedChatColor = useColorModeValue('#adc2ee', '#202B36')
-
     const chatHoverColor = useColorModeValue('#7eb2e0', '#24394e')
     const {user} = useUserStore()
+    const [dialogsPreview, setDialogsPreview] = useState<dialogsPreview[]>([])
 
-
-    const [dialogs, setDialogs] = useState<any>([])
     useEffect(() => {
-        const unsub = user && onSnapshot(doc(db, "dialogs", user.id), (response) => {
-            //const сhatsList = response.data().dialogs
-            //const promises = chatsList.map()
+        const unsub = user && onSnapshot(doc(db, "userDialogs", user.id), async (response) => {
+            if (response.exists()) {
+                const previewsInfo = response.data().dialogs as previewInfo[]
+                const promises = previewsInfo.map(async (previewInfo) => {
+                    const dialogUserDocRef = doc(db, "users", previewInfo.receiverId)
+                    const dialogUserDocSnap = await getDoc(dialogUserDocRef)
+                    const dialogUser = dialogUserDocSnap.data() as user
+                    return {previewInfo, dialogUser}
+                })
+                const dialogsPreviewData = await Promise.all(promises)
+                setDialogsPreview(dialogsPreviewData)
+            }
         })
         return () => {
             if (unsub) unsub()
         }
     }, [user]);
 
-    const startDialog = async (foundUserId:string) => {
+    const startDialog = async (foundUserId: string) => {
         const dialogRef = collection(db, "dialogs")
         const userDialogsRef = collection(db, "userDialogs")
-
-
-
-
         try {
-
             const newDialogRef = doc(dialogRef)
             await setDoc(newDialogRef, {
                 createdAt: serverTimestamp(),
-                messages:[]
+                messages: []
             })
-            await  updateDoc(doc(userDialogsRef, foundUserId),{
-                dialogs:arrayUnion({
+            await updateDoc(doc(userDialogsRef, foundUserId), {
+                dialogs: arrayUnion({
                     chatId: newDialogRef.id,
-                    lastMessage:"",
-                    receiverId:user!.id,
-                    updatedAt:Date.now()
+                    lastMessage: "",
+                    receiverId: user!.id,
+                    updatedAt: Date.now()
                 })
             })
-            await  updateDoc(doc(userDialogsRef, user!.id),{
-                dialogs:arrayUnion({
+            await updateDoc(doc(userDialogsRef, user!.id), {
+                dialogs: arrayUnion({
                     chatId: newDialogRef.id,
-                    lastMessage:"",
-                    receiverId:foundUserId,
-                    updatedAt:Date.now()
+                    lastMessage: "",
+                    receiverId: foundUserId,
+                    updatedAt: Date.now()
                 })
             })
-
         } catch (error) {
             console.log(error)
         }
     }
-
 
     return <Box borderRightWidth="1px"
                 borderRightColor="borders"
@@ -123,36 +96,9 @@ export const SideBar = () => {
              overflowY="auto"
              overflowX="hidden">
 
-            {foundUsers.map(foundUser => <Flex p={2}
-                                               key={foundUser.id}
-                                               onClick={()=>startDialog(foundUser.id)}
-                                               _hover={{backgroundColor: chatHoverColor}}
-                                               cursor="pointer">
-                <Avatar src={foundUser.avatar ?? undefined}/>
-                <Box ml="3">
-                    <Text color="text"
-                          fontWeight="semibold">
-                        {foundUser.username}
-                    </Text>
-                </Box>
-            </Flex>)}
-
-            {/*{foundUsers && <><Flex p={2}
-                                  onClick={() => {
-                                  }}
-                                  _hover={{backgroundColor: chatHoverColor}}
-                                  cursor="pointer">
-                <Avatar src={foundUsers.photoUrl ?? undefined}/>
-                <Box ml="3">
-                    <Text color="text"
-                          fontWeight="semibold">
-                        {foundUsers.displayName}
-                    </Text>
-                </Box>
-            </Flex>
-                <Divider/></>
-            }*/}
+            {foundUsers.map(foundUser => <DialogPreviewPlate  dialogUser={foundUser} onPreviewClick={() => startDialog(foundUser.id)}/>)}
             {foundUsers.length ? <Divider/> : undefined}
+
             {/*{dialogs.map(dialog =>
                 <Flex px={2}
                       py={1}
