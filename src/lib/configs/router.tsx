@@ -1,9 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
-import {LoginPage} from "../Components/Pages/LoginPage";
-import {RegisterPage} from "../Components/Pages/RegisterPage";
-import {Layout} from "../Components/Pages/Layout";
-import SettingsPage from "../Components/Pages/SettingsPage";
-import {ChatMainBlock} from "../Components/ChatMainBlock/ChatMainBlock";
+import {LoginPage} from "../../Components/Pages/LoginPage";
+import {RegisterPage} from "../../Components/Pages/RegisterPage";
+import {Layout} from "../../Components/Pages/Layout";
+import SettingsPage from "../../Components/Pages/SettingsPage";
+import {ChatMainBlock} from "../../Components/ChatMainBlock/ChatMainBlock";
 
 export const router = createBrowserRouter([
     {

@@ -2,8 +2,8 @@ import React, {KeyboardEvent, useState} from 'react';
 import {Input, InputGroup, useColorModeValue} from "@chakra-ui/react";
 import {CloseIcon, Search2Icon} from "@chakra-ui/icons";
 import {collection, getDocs, query, where} from 'firebase/firestore';
-import {db} from "../../lib/firebase";
-import {user} from "../../hooks/useUserStore";
+import {db} from "../../lib/configs/firebase";
+import {user} from "../../lib/hooks/useUserStore";
 
 type InputForUserSearchProps = {
     setFoundUsers: (foundUser: user[]) => void

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message";
 import {Box} from "@chakra-ui/react";
-import {useUserStore} from "../../hooks/useUserStore";
+import {useUserStore} from "../../lib/hooks/useUserStore";
 
 export type message = {
     date: {

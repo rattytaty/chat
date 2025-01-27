@@ -3,7 +3,7 @@ import {Outlet} from "react-router-dom";
 import {Grid, GridItem, useMediaQuery} from "@chakra-ui/react";
 import {SideBar} from "../SideBar/SideBar";
 
-import {useUserObserver} from "../../hooks/useUserObserver";
+import {useUserObserver} from "../../lib/hooks/useUserObserver";
 
 export const Layout = () => {
     useUserObserver()

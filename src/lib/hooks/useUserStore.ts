@@ -1,6 +1,6 @@
 import {create} from "zustand/react";
 import {doc, getDoc} from "firebase/firestore";
-import {db} from "../lib/firebase";
+import {db} from "../configs/firebase";
 
 export type user = {
     avatar: string | null,

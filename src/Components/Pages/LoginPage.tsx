@@ -2,10 +2,9 @@ import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
 
 import {signInWithEmailAndPassword} from "firebase/auth";
-import {auth} from "../../lib/firebase";
+import {auth} from "../../lib/configs/firebase";
 import {FirebaseError} from "firebase/app";
 import {
-    Avatar,
     Button,
     Center,
     Divider,
@@ -13,7 +12,6 @@ import {
     FormControl,
     FormHelperText,
     Heading,
-    Input,
     InputGroup,
     InputRightElement,
     Link as ChakraLink,
@@ -21,6 +19,7 @@ import {
 } from '@chakra-ui/react';
 import {ViewIcon, ViewOffIcon} from '@chakra-ui/icons';
 import {LoginRegisterFormLayout} from "./Login&RegisterFormLayout";
+import {StyledFormInput} from "./StyledFormInput";
 
 type formData = {
     email: string,
@@ -41,7 +40,7 @@ export const LoginPage = () => {
         e.preventDefault()
         const {email, password} = formData
         try {
-            await signInWithEmailAndPassword(auth, email, password).then(()=>navigate("/"))
+            await signInWithEmailAndPassword(auth, email, password).then(() => navigate("/"))
         } catch (error) {
             if (error instanceof FirebaseError) {
                 //const {code, message} = error
@@ -52,40 +51,51 @@ export const LoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
     const handleShowClick = () => setShowPassword(!showPassword);
 
+    const LoginHelper = <FormHelperText justifyContent="center"
+                                        color="text">
+        <Text textAlign="center">Login to existing acc:</Text>
+        <Flex direction="row"
+              justifyContent="center"
+              textAlign="center"
+              p={2}
+              gap={6}>
+            <Flex direction="column"
+                  p={2}
+                  cursor="pointer"
+                  onClick={() => {
+                      setFormData({email: "johndoe@gmail.com", password: "JohnDoe"})
+                  }}>
+                <Text>johndoe@gmail.com</Text>
+                <Text>JohnDoe</Text>
+            </Flex>
+            <Center height="60px">
+                <Divider orientation="vertical"/>
+            </Center>
+            <Flex direction="column"
+                  p={2}
+                  cursor="pointer"
+                  onClick={() => {
+                      setFormData({email: "janedoe@gmail.com", password: "JaneDoe"})
+                  }}>
+                <Text>janedoe@gmail.com</Text>
+                <Text>JaneDoe</Text>
+            </Flex>
+        </Flex>
+    </FormHelperText>
+
     return <LoginRegisterFormLayout>
         <Heading color="text">Login</Heading>
-        <Avatar/>
         <form onSubmit={handleFormSubmit}>
-            <Input type="email"
-                   placeholder="Email..."
-                   id="email"
-                   name="email"
-                   value={formData.email}
-                   mb={4}
-                   onChange={handleChange}
-                   border="none"
-                   _focusVisible={{
-                       outline: "none",
-                   }}
-                   _placeholder={{color:"#5A6670"}}
-                   color="text"
-                   bg="inputBg"
+            <StyledFormInput generalinfo="email"
+                             value={formData.email}
+                             onChange={handleChange}
             />
             <FormControl>
                 <InputGroup>
-                    <Input type={showPassword ? "text" : "password"}
-                           placeholder="Password..."
-                           id="password"
-                           name="password"
-                           value={formData.password}
-                           onChange={handleChange}
-                           color="text"
-                           border="none"
-                           _focusVisible={{
-                               outline: "none",
-                           }}
-                           _placeholder={{color:"#5A6670"}}
-                           bg="inputBg"
+                    <StyledFormInput generalinfo="password"
+                                     type={showPassword ? "text" : "password"}
+                                     value={formData.password}
+                                     onChange={handleChange}
                     />
                     <InputRightElement width="4.5rem"
                                        onClick={handleShowClick}>
@@ -94,37 +104,7 @@ export const LoginPage = () => {
                             : <ViewIcon color="#F5F5F5"/>}
                     </InputRightElement>
                 </InputGroup>
-                <FormHelperText justifyContent="center"
-                                color="text">
-                    <Text textAlign="center">Login to existing acc:</Text>
-                    <Flex direction="row"
-                          justifyContent="center"
-                          textAlign="center"
-                          p={4}
-                          gap={6}>
-                        <Flex direction="column"
-                              p={2}
-                              cursor="pointer"
-                              onClick={() => {
-                                  setFormData({email: "johndoe@gmail.com", password: "JohnDoe"})
-                              }}>
-                            <Text>johndoe@gmail.com</Text>
-                            <Text>JohnDoe</Text>
-                        </Flex>
-                        <Center height="60px">
-                            <Divider orientation="vertical"/>
-                        </Center>
-                        <Flex direction="column"
-                              p={2}
-                              cursor="pointer"
-                              onClick={() => {
-                                  setFormData({email: "janedoe@gmail.com", password: "JaneDoe"})
-                              }}>
-                            <Text>janedoe@gmail.com</Text>
-                            <Text>JaneDoe</Text>
-                        </Flex>
-                    </Flex>
-                </FormHelperText>
+                {LoginHelper}
             </FormControl>
             <Button borderRadius={5}
                     type="submit"
@@ -136,8 +116,11 @@ export const LoginPage = () => {
                 Login</Button>
         </form>
         <ChakraLink color="secondaryText"
+                    style={{textDecoration: "underline"}}
+                    _hover={{color: "#3971a8"}}
                     as={ReactRouterLink}
                     to="/register">
-            Or create a new account.</ChakraLink>
+            Or create a new account.
+        </ChakraLink>
     </LoginRegisterFormLayout>
 };

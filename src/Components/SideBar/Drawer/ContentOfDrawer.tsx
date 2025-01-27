@@ -16,9 +16,9 @@ import {
     useMediaQuery
 } from "@chakra-ui/react";
 import {AtSignIcon, Icon, SettingsIcon} from "@chakra-ui/icons";
-import {auth} from "../../../lib/firebase";
+import {auth} from "../../../lib/configs/firebase";
 import {useNavigate} from "react-router-dom";
-import {useUserStore} from "../../../hooks/useUserStore";
+import {useUserStore} from "../../../lib/hooks/useUserStore";
 
 type SideBarDrawerProps = {
     isOpen: boolean

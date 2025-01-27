@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
 import {createUserWithEmailAndPassword, updateProfile,} from "firebase/auth";
-import {auth, db} from "../../lib/firebase";
+import {auth, db} from "../../lib/configs/firebase";
 import {FirebaseError} from 'firebase/app';
 import {doc, setDoc} from "firebase/firestore";
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
@@ -16,6 +16,7 @@ import {
     Link as ChakraLink
 } from "@chakra-ui/react";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
+import {StyledFormInput} from "./StyledFormInput";
 
 type formData = {
     username: string,
@@ -35,9 +36,9 @@ export const RegisterPage = () => {
         setFormData(prevFormData => ({...prevFormData, [name]: value}));
     };
 
-    const checkFormData =()=>{
-        const regEx:RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim
-        if(true){
+    const checkFormData = () => {
+        const regEx: RegExp = /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/gim
+        if (true) {
 
         }
     }
@@ -53,14 +54,14 @@ export const RegisterPage = () => {
                 username
             })*/
             await setDoc(doc(db, "users", response.user.uid), {
-                avatar:null,
+                avatar: null,
                 username,
                 email,
                 id: response.user.uid,
-                blockedUsersList:[]
+                blockedUsersList: []
             });
             await setDoc(doc(db, "userDialogs", response.user.uid), {
-                dialogs:[]
+                dialogs: []
             });
             //navigate("/")
         } catch (error) {
@@ -77,56 +78,24 @@ export const RegisterPage = () => {
     return <LoginRegisterFormLayout>
         <Heading color="text">Register</Heading>
         <form onSubmit={handleFormSubmit}>
-          {/* <FormControl mb={4}>
+            {/* <FormControl mb={4}>
                 <FormErrorMessage>Have to be unique.</FormErrorMessage>
                 </FormControl>*/}
-            <Input placeholder="Username"
-                   id="username"
-                   name="username"
-                   value={formData.username}
-                   onChange={handleChange}
-                   type="text"
-                   color="text"
-                   border="none"
-                   _focusVisible={{
-                       outline: "none"
-                   }}
-                   _placeholder={{color:"#5A6670"}}
-                   bg="inputBg"
-                   mb={4}
-            />
-            <Input type="email"
-                   placeholder="Email"
-                   id="email"
-                   name="email"
-                   value={formData.email}
-                   onChange={handleChange}
-                   color="text"
-                   border="none"
-                   _focusVisible={{
-                       outline: "none"
-                   }}
-                   _placeholder={{color:"#5A6670"}}
-                   bg="inputBg"
-                   mb={4}
-            />
+
+
+            <StyledFormInput generalinfo="username "
+                             value={formData.username}
+                             onChange={handleChange}/>
+            <StyledFormInput generalinfo="email"
+                             value={formData.email}
+                             onChange={handleChange}/>
             <FormControl>
                 <InputGroup>
-                    <Input type={showPassword ? "text" : "password"}
-                           placeholder="Password"
-                           id="password"
-                           name="password"
-                           value={formData.password}
-                           onChange={handleChange}
-                           color="text"
-                           border="none"
-                           _focusVisible={{
-                               outline: "none"
-                           }}
-                           _placeholder={{color:"#5A6670"}}
-                           bg="inputBg"
-                           mb={4}
-                    />
+                    <StyledFormInput generalinfo="password"
+                                     type={showPassword ? "text" : "password"}
+                                     value={formData.password}
+                                     onChange={handleChange}/>
+
                     <InputRightElement width="4.5rem"
                                        onClick={handleShowClick}>
                         {showPassword
@@ -146,8 +115,10 @@ export const RegisterPage = () => {
                 Register</Button>
         </form>
         <ChakraLink color="secondaryText"
+
                     as={ReactRouterLink}
                     to="/login">
-            Have an account already?</ChakraLink>
+            Have an account already?
+        </ChakraLink>
     </LoginRegisterFormLayout>
 };

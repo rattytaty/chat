@@ -1,7 +1,7 @@
 import React from 'react';
 import {Avatar, Box, Flex, Text, useColorModeValue} from "@chakra-ui/react";
 import {previewInfo} from "./SideBar";
-import {user} from "../../hooks/useUserStore";
+import {user} from "../../lib/hooks/useUserStore";
 
 type DialogPreviewPlateProps = {
     previewInfo?: previewInfo
