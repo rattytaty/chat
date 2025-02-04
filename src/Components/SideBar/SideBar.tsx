@@ -38,7 +38,7 @@ export const SideBar = () => {
                     return {previewInfo, dialogUser}
                 })
                 const dialogsPreviewData = await Promise.all(promises)
-                setDialogPreviews(dialogsPreviewData)
+                setDialogPreviews(dialogsPreviewData.sort((a,b)=>b.previewInfo.updatedAt-a.previewInfo.updatedAt))
             }
         })
         return () => {

@@ -1,23 +1,49 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue} from "@chakra-ui/react";
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
 
-import {SelectedChatInfo} from "./SelectedChatInfo";
+import {DialogInfo} from "./DialogInfo";
+import {useDialogStore} from "../../lib/hooks/useDialogStore";
+import {doc, onSnapshot} from "firebase/firestore";
+import {db} from "../../lib/configs/firebase";
+
+type message = {}
+
+type dialogType = {
+    createdAt: string
+    messages: message[]
+}
 
 export const ChatMainBlock: React.FC = React.memo(() => {
 
 
-    const [msgText, setMsgText] = useState("")
+    const [messageText, setMessageText] = useState("")
     const [img, setImg] = useState<File | null>(null)
 
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
+    const {dialogId} = useDialogStore()
 
+    const [dialog, setDialog] = useState<dialogType>()
+
+    useEffect(() => {
+
+        const unSub = onSnapshot(doc(db, "dialogs", dialogId!), (res) => {
+            setDialog(res.data() as dialogType)
+        })
+        return () => unSub()
+    }, [dialogId]);
+
+    const sendMessage = () => {
+        if (!messageText) return
+
+    }
     return <Box bg="primaryBg"
                 h="100vh">
-        {/*{selectedChat.chatId && <Box >
-            <SelectedChatInfo/>
+        {dialogId && <Box>
+            <DialogInfo/>
             <MessagesBlock/>
+
             <Box display="flex"
                  alignItems="center"
                  h="40px"
@@ -48,11 +74,11 @@ export const ChatMainBlock: React.FC = React.memo(() => {
                            }}
                            color="text"
                            placeholder="Write a message..."
-                           value={msgText}
-                           onChange={event => setMsgText(event.currentTarget.value)}
-                           //onKeyDown={event => event.code === "Enter" && sendMsg()}\
+                           value={messageText}
+                           onChange={event => setMessageText(event.currentTarget.value)}
+                           onKeyDown={event => event.code === "Enter" && sendMessage()}
                     />
-                    <InputRightAddon //onClick={sendMsg}
+                    <InputRightAddon onClick={sendMessage}
                                      _hover={{color: iconHoverColor}}
                                      border="none"
                                      bg="none"
@@ -61,6 +87,6 @@ export const ChatMainBlock: React.FC = React.memo(() => {
                                      children={<ArrowForwardIcon boxSize={6}/>}/>
                 </InputGroup>
             </Box>
-        </Box>}*/}
+        </Box>}
     </Box>
 })

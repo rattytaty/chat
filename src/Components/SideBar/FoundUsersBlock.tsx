@@ -6,7 +6,7 @@ import {arrayUnion, collection, doc, serverTimestamp, setDoc, updateDoc} from "f
 import {db} from "../../lib/configs/firebase";
 
 
-export const FoundUsersBlock = ({foundUsers}: {foundUsers:user[]}) => {
+export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
     const {user} = useUserStore()
     const startDialog = async (foundUserId: string) => {
         const dialogRef = collection(db, "dialogs")
@@ -38,7 +38,8 @@ export const FoundUsersBlock = ({foundUsers}: {foundUsers:user[]}) => {
         }
     }
     return <>
-        {foundUsers.map(foundUser => <DialogPreviewPlate  dialogUser={foundUser} onPreviewClick={() => startDialog(foundUser.id)}/>)}
+        {foundUsers.map(foundUser => <DialogPreviewPlate dialogUser={foundUser}
+                                                         onPreviewClick={() => startDialog(foundUser.id)}/>)}
         {foundUsers.length ? <Divider/> : undefined}
-        </>
+    </>
 };
