@@ -10,10 +10,11 @@ import {FoundUsersBlock} from "./FoundUsersBlock";
 import {DialogPreviewsBlock} from './DialogPreviewsBlock';
 
 export type previewInfo = {
-    chatId: string
+    dialogId: string
     lastMessage: string
     receiverId: string
     updatedAt: number
+    isRead:boolean
 }
 
 export type dialogPreview = {

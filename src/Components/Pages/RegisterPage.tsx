@@ -83,7 +83,7 @@ export const RegisterPage = () => {
                 </FormControl>*/}
 
 
-            <StyledFormInput generalinfo="username "
+            <StyledFormInput generalinfo="username"
                              value={formData.username}
                              onChange={handleChange}/>
             <StyledFormInput generalinfo="email"

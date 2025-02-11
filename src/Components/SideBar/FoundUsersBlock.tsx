@@ -8,6 +8,7 @@ import {db} from "../../lib/configs/firebase";
 
 export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
     const {user} = useUserStore()
+    console.log(user)
     const startDialog = async (foundUserId: string) => {
         const dialogRef = collection(db, "dialogs")
         const userDialogsRef = collection(db, "userDialogs")
@@ -19,18 +20,20 @@ export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
             })
             await updateDoc(doc(userDialogsRef, foundUserId), {
                 dialogs: arrayUnion({
-                    chatId: newDialogRef.id,
+                    dialogId: newDialogRef.id,
                     lastMessage: "",
                     receiverId: user!.id,
-                    updatedAt: Date.now()
+                    updatedAt: Date.now(),
+                    isRead:true
                 })
             })
             await updateDoc(doc(userDialogsRef, user!.id), {
                 dialogs: arrayUnion({
-                    chatId: newDialogRef.id,
+                    dialogId: newDialogRef.id,
                     lastMessage: "",
                     receiverId: foundUserId,
-                    updatedAt: Date.now()
+                    updatedAt: Date.now(),
+                    isRead:true
                 })
             })
         } catch (error) {

@@ -7,15 +7,15 @@ import {user} from "../../lib/hooks/useUserStore";
 export const DialogPreviewsBlock = ({dialogPreviews}: { dialogPreviews: dialogPreview[] }) => {
 
     const {changeDialog} = useDialogStore()
-    const selectDialog = (chatId: string, receiverUser: user) => {
-        changeDialog(chatId, receiverUser)
+    const selectDialog = (dialogId: string, receiverUser: user) => {
+        changeDialog(dialogId, receiverUser)
     }
 
 
     return <>{
-        dialogPreviews.map(dialogPreview => <DialogPreviewPlate key={dialogPreview.previewInfo.chatId}
+        dialogPreviews.map(dialogPreview => <DialogPreviewPlate key={dialogPreview.previewInfo.dialogId}
                                                                 dialogUser={dialogPreview.dialogUser}
-                                                                onPreviewClick={() => selectDialog(dialogPreview.previewInfo.chatId, dialogPreview.dialogUser)}
+                                                                onPreviewClick={() => selectDialog(dialogPreview.previewInfo.dialogId, dialogPreview.dialogUser)}
                                                                 previewInfo={dialogPreview.previewInfo}/>)
     }</>
 };

@@ -5,8 +5,10 @@ import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
 
 import {DialogInfo} from "./DialogInfo";
 import {useDialogStore} from "../../lib/hooks/useDialogStore";
-import {doc, onSnapshot} from "firebase/firestore";
+import {arrayUnion, doc, getDoc, onSnapshot, updateDoc} from "firebase/firestore";
 import {db} from "../../lib/configs/firebase";
+import {useUserStore} from "../../lib/hooks/useUserStore";
+import {previewInfo} from "../SideBar/SideBar";
 
 type message = {}
 
@@ -17,25 +19,63 @@ type dialogType = {
 
 export const ChatMainBlock: React.FC = React.memo(() => {
 
+    const {user} = useUserStore()
 
     const [messageText, setMessageText] = useState("")
     const [img, setImg] = useState<File | null>(null)
-
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
-    const {dialogId} = useDialogStore()
-
+    const {dialogId, receiverUser} = useDialogStore()
     const [dialog, setDialog] = useState<dialogType>()
 
     useEffect(() => {
-
+        if (!dialogId) return
         const unSub = onSnapshot(doc(db, "dialogs", dialogId!), (res) => {
             setDialog(res.data() as dialogType)
         })
         return () => unSub()
     }, [dialogId]);
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
         if (!messageText) return
+        try {
+            await updateDoc(doc(db, "dialogs", dialogId!), {
+                messages: arrayUnion({
+                    senderId: user?.id,
+                    text: messageText,
+                    sendingTime: new Date()
+                })
+            })
+
+            const userDialogsRef = doc(db, "userDialogs", user!.id)
+            const userDialogsSnap = await getDoc(userDialogsRef)
+            if (userDialogsSnap.exists()) {
+                const userDialogsData = userDialogsSnap.data().dialogs as previewInfo[]
+                const dialogIndex = userDialogsData.findIndex(c => c.dialogId === dialogId)
+                userDialogsData[dialogIndex].lastMessage = messageText
+                userDialogsData[dialogIndex].isRead = true
+                userDialogsData[dialogIndex].updatedAt = Date.now()
+                await updateDoc(userDialogsRef, {
+                    dialogs: userDialogsData,
+                })
+            }
+
+            const receiverDialogsRef = doc(db, "userDialogs", receiverUser!.id)
+            const receiverDialogsSnap = await getDoc(receiverDialogsRef)
+            if (receiverDialogsSnap.exists()){
+                const receiverDialogsData = receiverDialogsSnap.data().dialogs as previewInfo[]
+                const  dialogIndex = receiverDialogsData.findIndex(c=>c.dialogId === dialogId)
+                receiverDialogsData[dialogIndex].lastMessage = messageText
+                receiverDialogsData[dialogIndex].isRead = false
+                receiverDialogsData[dialogIndex].updatedAt = Date.now()
+                await  updateDoc(userDialogsRef, {
+                    dialogs:receiverDialogsData,
+                })
+            }
+
+            setMessageText("")
+        } catch (error) {
+
+        }
 
     }
     return <Box bg="primaryBg"

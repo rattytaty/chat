@@ -6,7 +6,7 @@ type dialogStore = {
     receiverUser: user | null
     isUserBlocked: boolean
     isReceiverBlocked: boolean
-    changeDialog: (chatId: string | null, receiverUser: user | null) => void
+    changeDialog: (dialogId: string | null, receiverUser: user | null) => void
     changeBlocked: () => void
 }
 
@@ -25,6 +25,7 @@ export const useDialogStore = create<dialogStore>()((setState, getState, store) 
                 isUserBlocked: false,
             })
         }
+
         if (receiverUser.blockedUsersList.includes(user!.id)) {
             return setState({
                 dialogId,
