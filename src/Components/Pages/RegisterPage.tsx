@@ -104,7 +104,6 @@ export const RegisterPage = () => {
                     </InputRightElement>
                 </InputGroup>
             </FormControl>
-
             <Button borderRadius={5}
                     type="submit"
                     variant="solid"

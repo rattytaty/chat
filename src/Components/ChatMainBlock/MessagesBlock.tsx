@@ -2,27 +2,35 @@ import React, {useEffect, useRef, useState} from 'react';
 import {Message} from "./Message";
 import {Box} from "@chakra-ui/react";
 import {useUserStore} from "../../lib/hooks/useUserStore";
+import {doc, onSnapshot} from "firebase/firestore";
+import {db} from "../../lib/configs/firebase";
+import {useDialogStore} from "../../lib/hooks/useDialogStore";
+import {message} from "./ChatMainBlock";
 
-export type message = {
-    date: {
-        seconds: number
-        nanoseconds: number
-    }
-    id: string
-    msgText: string
-    senderId: string
-}
+
+
 
 export const MessagesBlock = () => {
 
-
+const {dialogId} = useDialogStore()
     const [messages, setMessages] = useState<message[]>([])
     const {user} = useUserStore()
 
-    const reference = useRef<HTMLDivElement>(null);
+    const referenceForScroll = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        reference.current && reference.current.scrollIntoView({behavior: "smooth"});
+        referenceForScroll.current && referenceForScroll.current.scrollIntoView({behavior: "smooth"});
     }, [messages]);
+
+
+    useEffect(() => {
+        if(!dialogId) return
+       const unSub =  onSnapshot(doc(db, "dialogs", dialogId), res=>{
+           if (res.exists()){
+               setMessages(res.data().messages as message[])
+           }
+       })
+        return ()=>unSub()
+    }, [dialogId]);
 
     return <Box height="calc(100vh - 100px)"
                 flexDirection="column"
@@ -30,10 +38,10 @@ export const MessagesBlock = () => {
                 style={{scrollbarWidth: "thin"}}
                 overflowY="auto">
         {messages.map(message =>
-            <Message key={message.id}
+            <Message key={message.sendingTime.seconds.toString()+message.sendingTime.nanoseconds.toString()+message.senderId}
                      position={message.senderId === user!.id ? "right" : "left"}
                      message={message}
             />)}
-        <div ref={reference}></div>
+        <div ref={referenceForScroll}></div>
     </Box>
 }

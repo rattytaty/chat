@@ -1,26 +1,17 @@
 import React from 'react';
-import {message} from './MessagesBlock';
 import {Flex, Text} from "@chakra-ui/react";
+import {message} from "./ChatMainBlock";
+import {formatTimeToHHMM} from "../../lib/helpers/formatTimeToHHMM";
+import {formatToDDMM} from "../../lib/helpers/formatToDDMM";
 
-
-const formatTimeToHHMM = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-}
-const formatToDDMM = (date: Date) => {
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${day}.${month}`;
-}
-type Message = {
+type MessageProps = {
     position: "left" | "right",
     message: message
 }
 
-export const Message: React.FC<Message> = React.memo(({position, message}) => {
+export const Message: React.FC<MessageProps> = React.memo(({position, message}) => {
     const todayDate = new Date()
-    const dateOfMessage = new Date(message.date.seconds * 1000);
+    const dateOfMessage = new Date(message.sendingTime.seconds * 1000);
     const isToday = todayDate.getDate() === dateOfMessage.getDate() && todayDate.getMonth() === dateOfMessage.getMonth() && todayDate.getFullYear() === dateOfMessage.getFullYear()
     const messageTime = isToday
         ? formatTimeToHHMM(dateOfMessage)
@@ -37,6 +28,6 @@ export const Message: React.FC<Message> = React.memo(({position, message}) => {
               maxWidth="75%"
               borderRadius="xl"
               bg={position === "left" ? "leftMsg" : "rightMsg"}>
-            {message.msgText}</Text>
+            {message.text}</Text>
     </Flex>
 })

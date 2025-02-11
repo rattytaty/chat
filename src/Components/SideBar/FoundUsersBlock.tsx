@@ -8,7 +8,6 @@ import {db} from "../../lib/configs/firebase";
 
 export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
     const {user} = useUserStore()
-    console.log(user)
     const startDialog = async (foundUserId: string) => {
         const dialogRef = collection(db, "dialogs")
         const userDialogsRef = collection(db, "userDialogs")

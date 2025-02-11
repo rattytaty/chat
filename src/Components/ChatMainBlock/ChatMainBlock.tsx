@@ -10,7 +10,14 @@ import {db} from "../../lib/configs/firebase";
 import {useUserStore} from "../../lib/hooks/useUserStore";
 import {previewInfo} from "../SideBar/SideBar";
 
-type message = {}
+export type message = {
+    senderId: string
+    text: string
+    sendingTime: {
+        seconds: number
+        nanoseconds: number
+    }
+}
 
 type dialogType = {
     createdAt: string
@@ -20,13 +27,11 @@ type dialogType = {
 export const ChatMainBlock: React.FC = React.memo(() => {
 
     const {user} = useUserStore()
-
     const [messageText, setMessageText] = useState("")
     const [img, setImg] = useState<File | null>(null)
     const iconHoverColor = useColorModeValue('#2d2b2b', '#F5F5F5')
     const {dialogId, receiverUser} = useDialogStore()
     const [dialog, setDialog] = useState<dialogType>()
-
     useEffect(() => {
         if (!dialogId) return
         const unSub = onSnapshot(doc(db, "dialogs", dialogId!), (res) => {
@@ -61,14 +66,15 @@ export const ChatMainBlock: React.FC = React.memo(() => {
 
             const receiverDialogsRef = doc(db, "userDialogs", receiverUser!.id)
             const receiverDialogsSnap = await getDoc(receiverDialogsRef)
-            if (receiverDialogsSnap.exists()){
+            if (receiverDialogsSnap.exists()) {
                 const receiverDialogsData = receiverDialogsSnap.data().dialogs as previewInfo[]
-                const  dialogIndex = receiverDialogsData.findIndex(c=>c.dialogId === dialogId)
+                const dialogIndex = receiverDialogsData.findIndex(c => c.dialogId === dialogId)
                 receiverDialogsData[dialogIndex].lastMessage = messageText
                 receiverDialogsData[dialogIndex].isRead = false
                 receiverDialogsData[dialogIndex].updatedAt = Date.now()
-                await  updateDoc(userDialogsRef, {
-                    dialogs:receiverDialogsData,
+                console.log(receiverDialogsData[dialogIndex])
+                await updateDoc(receiverDialogsRef, {
+                    dialogs: receiverDialogsData,
                 })
             }
 
