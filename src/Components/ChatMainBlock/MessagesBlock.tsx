@@ -6,6 +6,7 @@ import {doc, onSnapshot} from "firebase/firestore";
 import {db} from "../../lib/configs/firebase";
 import {useDialogStore} from "../../lib/hooks/useDialogStore";
 import {message} from "./ChatMainBlock";
+import {CheckIcon, CloseIcon, DeleteIcon, PlusSquareIcon, SmallCloseIcon, SpinnerIcon} from "@chakra-ui/icons";
 
 
 
@@ -38,10 +39,11 @@ const {dialogId} = useDialogStore()
                 style={{scrollbarWidth: "thin"}}
                 overflowY="auto">
         {messages.map(message =>
-            <Message key={message.sendingTime.seconds.toString()+message.sendingTime.nanoseconds.toString()+message.senderId}
+            <Message key={message.sendingTime+message.senderId}
                      position={message.senderId === user!.id ? "right" : "left"}
                      message={message}
             />)}
         <div ref={referenceForScroll}></div>
+
     </Box>
 }

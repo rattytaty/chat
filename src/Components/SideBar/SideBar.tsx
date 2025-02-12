@@ -8,12 +8,12 @@ import {db} from "../../lib/configs/firebase";
 import {user, useUserStore} from "../../lib/hooks/useUserStore";
 import {FoundUsersBlock} from "./FoundUsersBlock";
 import {DialogPreviewsBlock} from './DialogPreviewsBlock';
+import {message} from "../ChatMainBlock/ChatMainBlock";
 
 export type previewInfo = {
     dialogId: string
-    lastMessage: string
+    lastMessage: message
     receiverId: string
-    updatedAt: number
     isRead:boolean
 }
 
@@ -39,7 +39,7 @@ export const SideBar = () => {
                     return {previewInfo, dialogUser}
                 })
                 const dialogsPreviewData = await Promise.all(promises)
-                setDialogPreviews(dialogsPreviewData.sort((a,b)=>b.previewInfo.updatedAt-a.previewInfo.updatedAt))
+                setDialogPreviews(dialogsPreviewData.sort((a,b)=>b.previewInfo.lastMessage.sendingTime-a.previewInfo.lastMessage.sendingTime))
             }
         })
         return () => {

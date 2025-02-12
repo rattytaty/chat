@@ -13,10 +13,7 @@ import {previewInfo} from "../SideBar/SideBar";
 export type message = {
     senderId: string
     text: string
-    sendingTime: {
-        seconds: number
-        nanoseconds: number
-    }
+    sendingTime: number
 }
 
 type dialogType = {
@@ -41,14 +38,17 @@ export const ChatMainBlock: React.FC = React.memo(() => {
     }, [dialogId]);
 
     const sendMessage = async () => {
+
         if (!messageText) return
+        const message:message = {
+            senderId: user!.id,
+            text: messageText,
+            sendingTime: Date.now()
+        }
+        console.log(message)
         try {
             await updateDoc(doc(db, "dialogs", dialogId!), {
-                messages: arrayUnion({
-                    senderId: user?.id,
-                    text: messageText,
-                    sendingTime: new Date()
-                })
+                messages: arrayUnion(message)
             })
 
             const userDialogsRef = doc(db, "userDialogs", user!.id)
@@ -56,9 +56,9 @@ export const ChatMainBlock: React.FC = React.memo(() => {
             if (userDialogsSnap.exists()) {
                 const userDialogsData = userDialogsSnap.data().dialogs as previewInfo[]
                 const dialogIndex = userDialogsData.findIndex(c => c.dialogId === dialogId)
-                userDialogsData[dialogIndex].lastMessage = messageText
+                userDialogsData[dialogIndex].lastMessage = message
                 userDialogsData[dialogIndex].isRead = true
-                userDialogsData[dialogIndex].updatedAt = Date.now()
+
                 await updateDoc(userDialogsRef, {
                     dialogs: userDialogsData,
                 })
@@ -69,10 +69,8 @@ export const ChatMainBlock: React.FC = React.memo(() => {
             if (receiverDialogsSnap.exists()) {
                 const receiverDialogsData = receiverDialogsSnap.data().dialogs as previewInfo[]
                 const dialogIndex = receiverDialogsData.findIndex(c => c.dialogId === dialogId)
-                receiverDialogsData[dialogIndex].lastMessage = messageText
+                receiverDialogsData[dialogIndex].lastMessage = message
                 receiverDialogsData[dialogIndex].isRead = false
-                receiverDialogsData[dialogIndex].updatedAt = Date.now()
-                console.log(receiverDialogsData[dialogIndex])
                 await updateDoc(receiverDialogsRef, {
                     dialogs: receiverDialogsData,
                 })

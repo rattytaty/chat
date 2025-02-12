@@ -20,18 +20,24 @@ export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
             await updateDoc(doc(userDialogsRef, foundUserId), {
                 dialogs: arrayUnion({
                     dialogId: newDialogRef.id,
-                    lastMessage: "",
+                    lastMessage: {
+                        senderId: user!.id,
+                        text: "",
+                        sendingTime: Date.now(),
+                    },
                     receiverId: user!.id,
-                    updatedAt: Date.now(),
                     isRead:true
                 })
             })
             await updateDoc(doc(userDialogsRef, user!.id), {
                 dialogs: arrayUnion({
                     dialogId: newDialogRef.id,
-                    lastMessage: "",
+                    lastMessage: {
+                        senderId: user!.id,
+                        text: "",
+                        sendingTime: Date.now(),
+                    },
                     receiverId: foundUserId,
-                    updatedAt: Date.now(),
                     isRead:true
                 })
             })
