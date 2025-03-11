@@ -4,6 +4,7 @@ import {CloseIcon, Search2Icon} from "@chakra-ui/icons";
 import {collection, getDocs, query, where} from 'firebase/firestore';
 import {db} from "../../lib/configs/firebase";
 import {user} from "../../lib/hooks/useUserStore";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 type InputForUserSearchProps = {
     setFoundUsers: (foundUser: user[]) => void
@@ -20,7 +21,7 @@ export const InputForUserSearch = ({setFoundUsers}: InputForUserSearchProps) => 
     const searchForUser = async () => {
         if (!userForSearch) return
         try {
-            const userRef = collection(db, "users")
+            const userRef = collection(db, dbCollections.USERS)
             const q = query(userRef, where("username", ">=", userForSearch), where('username', '<=', userForSearch + '~'))
             const querySnapshot = await getDocs(q)
             if (!querySnapshot.empty) {

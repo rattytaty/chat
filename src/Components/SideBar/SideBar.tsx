@@ -9,6 +9,7 @@ import {user, useUserStore} from "../../lib/hooks/useUserStore";
 import {FoundUsersBlock} from "./FoundUsersBlock";
 import {DialogPreviewsBlock} from './DialogPreviewsBlock';
 import {message} from "../ChatMainBlock/ChatMainBlock";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 export type previewInfo = {
     dialogId: string
@@ -29,11 +30,11 @@ export const SideBar = () => {
     const [dialogPreviews, setDialogPreviews] = useState<dialogPreview[]>([])
 
     useEffect(() => {
-        const unsub = user && onSnapshot(doc(db, "userDialogs", user.id), async (response) => {
+        const unsub = user && onSnapshot(doc(db, dbCollections.USERDIALOGS, user.id), async (response) => {
             if (response.exists()) {
                 const previewsInfo = response.data().dialogs as previewInfo[]
                 const promises = previewsInfo.map(async (previewInfo) => {
-                    const dialogUserDocRef = doc(db, "users", previewInfo.receiverId)
+                    const dialogUserDocRef = doc(db, dbCollections.USERS, previewInfo.receiverId)
                     const dialogUserDocSnap = await getDoc(dialogUserDocRef)
                     const dialogUser = dialogUserDocSnap.data() as user
                     return {previewInfo, dialogUser}

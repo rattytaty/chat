@@ -7,6 +7,7 @@ import {db} from "../../lib/configs/firebase";
 import {useDialogStore} from "../../lib/hooks/useDialogStore";
 import {message} from "./ChatMainBlock";
 import {CheckIcon, CloseIcon, DeleteIcon, PlusSquareIcon, SmallCloseIcon, SpinnerIcon} from "@chakra-ui/icons";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 
 
@@ -25,7 +26,7 @@ const {dialogId} = useDialogStore()
 
     useEffect(() => {
         if(!dialogId) return
-       const unSub =  onSnapshot(doc(db, "dialogs", dialogId), res=>{
+       const unSub =  onSnapshot(doc(db, dbCollections.DIALOGS, dialogId), res=>{
            if (res.exists()){
                setMessages(res.data().messages as message[])
            }

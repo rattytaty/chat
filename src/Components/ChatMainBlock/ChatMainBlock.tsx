@@ -9,6 +9,7 @@ import {arrayUnion, doc, getDoc, onSnapshot, updateDoc} from "firebase/firestore
 import {db} from "../../lib/configs/firebase";
 import {useUserStore} from "../../lib/hooks/useUserStore";
 import {previewInfo} from "../SideBar/SideBar";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 export type message = {
     senderId: string
@@ -31,7 +32,7 @@ export const ChatMainBlock: React.FC = React.memo(() => {
     const [dialog, setDialog] = useState<dialogType>()
     useEffect(() => {
         if (!dialogId) return
-        const unSub = onSnapshot(doc(db, "dialogs", dialogId!), (res) => {
+        const unSub = onSnapshot(doc(db, dbCollections.DIALOGS, dialogId!), (res) => {
             setDialog(res.data() as dialogType)
         })
         return () => unSub()
@@ -47,11 +48,11 @@ export const ChatMainBlock: React.FC = React.memo(() => {
         }
         console.log(message)
         try {
-            await updateDoc(doc(db, "dialogs", dialogId!), {
+            await updateDoc(doc(db, dbCollections.DIALOGS, dialogId!), {
                 messages: arrayUnion(message)
             })
 
-            const userDialogsRef = doc(db, "userDialogs", user!.id)
+            const userDialogsRef = doc(db, dbCollections.USERDIALOGS, user!.id)
             const userDialogsSnap = await getDoc(userDialogsRef)
             if (userDialogsSnap.exists()) {
                 const userDialogsData = userDialogsSnap.data().dialogs as previewInfo[]
@@ -64,7 +65,7 @@ export const ChatMainBlock: React.FC = React.memo(() => {
                 })
             }
 
-            const receiverDialogsRef = doc(db, "userDialogs", receiverUser!.id)
+            const receiverDialogsRef = doc(db, dbCollections.USERDIALOGS, receiverUser!.id)
             const receiverDialogsSnap = await getDoc(receiverDialogsRef)
             if (receiverDialogsSnap.exists()) {
                 const receiverDialogsData = receiverDialogsSnap.data().dialogs as previewInfo[]

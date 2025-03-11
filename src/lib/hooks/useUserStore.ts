@@ -1,6 +1,7 @@
 import {create} from "zustand/react";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../configs/firebase";
+import {dbCollections} from "../configs/dbCollections";
 
 export type user = {
     avatar: string | null,
@@ -29,7 +30,7 @@ export const useUserStore = create<userStore>()((setState, getState, store) => (
             })
         }
         try {
-            const docRef = doc(db, "users", uId)
+            const docRef = doc(db, dbCollections.USERS, uId)
             const docSpan = await getDoc(docRef)
             if (docSpan.exists()) {
                 setState({

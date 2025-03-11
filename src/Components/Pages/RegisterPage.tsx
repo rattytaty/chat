@@ -1,22 +1,14 @@
 import React, {ChangeEvent, FormEvent, useState} from 'react';
-import {createUserWithEmailAndPassword, updateProfile,} from "firebase/auth";
+import {createUserWithEmailAndPassword,} from "firebase/auth";
 import {auth, db} from "../../lib/configs/firebase";
 import {FirebaseError} from 'firebase/app';
 import {doc, setDoc} from "firebase/firestore";
 import {NavLink as ReactRouterLink, useNavigate} from "react-router-dom";
 import {LoginRegisterFormLayout} from "./Login&RegisterFormLayout";
-import {
-    Button,
-    FormControl,
-    FormErrorMessage,
-    Heading,
-    Input,
-    InputGroup,
-    InputRightElement,
-    Link as ChakraLink
-} from "@chakra-ui/react";
+import {Button, FormControl, Heading, InputGroup, InputRightElement, Link as ChakraLink} from "@chakra-ui/react";
 import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 import {StyledFormInput} from "./StyledFormInput";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 type formData = {
     username: string,
@@ -53,14 +45,14 @@ export const RegisterPage = () => {
             /*await updateProfile(response.user, {
                 username
             })*/
-            await setDoc(doc(db, "users", response.user.uid), {
+            await setDoc(doc(db, dbCollections.USERS, response.user.uid), {
                 avatar: null,
                 username,
                 email,
                 id: response.user.uid,
                 blockedUsersList: []
             });
-            await setDoc(doc(db, "userDialogs", response.user.uid), {
+            await setDoc(doc(db, dbCollections.USERDIALOGS, response.user.uid), {
                 dialogs: []
             });
             //navigate("/")

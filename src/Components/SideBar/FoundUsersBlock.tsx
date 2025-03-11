@@ -4,13 +4,14 @@ import {Divider} from "@chakra-ui/react";
 import {user, useUserStore} from "../../lib/hooks/useUserStore";
 import {arrayUnion, collection, doc, serverTimestamp, setDoc, updateDoc} from "firebase/firestore";
 import {db} from "../../lib/configs/firebase";
+import {dbCollections} from "../../lib/configs/dbCollections";
 
 
 export const FoundUsersBlock = ({foundUsers}: { foundUsers: user[] }) => {
     const {user} = useUserStore()
     const startDialog = async (foundUserId: string) => {
-        const dialogRef = collection(db, "dialogs")
-        const userDialogsRef = collection(db, "userDialogs")
+        const dialogRef = collection(db, dbCollections.DIALOGS)
+        const userDialogsRef = collection(db, dbCollections.USERDIALOGS)
         try {
             const newDialogRef = doc(dialogRef)
             await setDoc(newDialogRef, {
