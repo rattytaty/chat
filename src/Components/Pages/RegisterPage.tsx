@@ -10,6 +10,7 @@ import {ViewIcon, ViewOffIcon} from "@chakra-ui/icons";
 import {StyledFormInput} from "./StyledFormInput";
 import {dbCollections} from "../../lib/configs/dbCollections";
 
+
 type formData = {
     username: string,
     email: string,
