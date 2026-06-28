@@ -1,6 +1,6 @@
 import React from 'react';
-import {Input} from "@chakra-ui/react";
-import {InputProps} from "@chakra-ui/input/dist/input";
+import {Input, InputProps} from "@chakra-ui/react";
+
 import {toCapitalLetter} from "../../lib/helpers/toCapitalLetter";
 
 
