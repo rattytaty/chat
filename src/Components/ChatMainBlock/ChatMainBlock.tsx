@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue} from "@chakra-ui/react";
+import {Box, Input, InputGroup, InputLeftAddon, InputRightAddon, useColorModeValue,} from "@chakra-ui/react";
 import {MessagesBlock} from "./MessagesBlock";
 import {ArrowForwardIcon, AttachmentIcon} from "@chakra-ui/icons";
 
